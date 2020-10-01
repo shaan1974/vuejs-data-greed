@@ -42,18 +42,23 @@
     //
         $where="";
         $jsonWhere = json_decode($_POST['search'],true);
-        if ( count($jsonWhere)===0)
+        
+        // if ( count($jsonWhere)===0)
+        if ( $_POST['search_mode']==="")
         {
             $where="";
         }
-        else if ( count($jsonWhere)===1)
+        // else if ( count($jsonWhere)===1)
+        else if ( $_POST['search_mode']==="GLOBAL")
         {
             $w = array();
+            $jsonWhere = $_POST['search'];
             for($j=0;$j<count($columns->names);$j++)
             {
                 if ( $columns->types[$j]!=="NONE")
                 {
-                    array_push( $w , " ".$columns->names[$j]." like '%".$jsonWhere[0]."%'" );
+                    // array_push( $w , " ".$columns->names[$j]." like '%".$jsonWhere[0]."%'" );
+                    array_push( $w , " ".$columns->names[$j]." like '%".$jsonWhere."%'" );
                 }
             }
             $where=" WHERE ".implode(" OR " , $w). " ";

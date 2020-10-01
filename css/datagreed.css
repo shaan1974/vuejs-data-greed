@@ -300,3 +300,30 @@
 .dataGreed .mw75px {
     min-width: 75px;
 }
+
+
+/* -- */
+
+.dataGreed .eraseIcon {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: #aaa;
+    color: #fff;
+    border-radius: 100%;
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    line-height: 12px;
+    font-size: 12px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+
+/* -- */
+
+.dataGreed mark {
+    border-width: 1px;
+    border-style: solid;
+}

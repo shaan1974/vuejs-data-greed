@@ -19,7 +19,8 @@ function initComponent(app)
                     "globalSearch": "",
                     "columnnSearch": [],
                     "previousSearch": "",
-                    "lastFocusField": ""
+                    "lastFocusField": "",
+                    "searchMode": ""
                 };
             },
             props: ['config'],
@@ -80,6 +81,12 @@ function initComponent(app)
                 },
                 "datatTo": function()
                 {
+                    //  IN CASE OF TOTAL ROWS ARE BELOW RECORD PAGES
+                    //
+                    if (this.totalRows < this.config_recordsPerPage)
+                    {
+                        return this.totalRows;
+                    }
                     return ((this.pageno - 1) * this.config_recordsPerPage) + this.config_recordsPerPage;
                 },
                 /*
@@ -159,14 +166,20 @@ function initComponent(app)
                 /*
                     BUILD FILTER FOR EACH COLUMNS
                 */
-                _searchFilter: debounce(function(e)
+                _searchFilter: debounce(function(e, ndx)
                 {
                     //  IF FILTER IS CALLED BY AN INPUT WE SET THIS INPUT INTO TEMP VAR
-                    //                    
+                    //          
+                    var keyMode = "";
                     if (typeof e !== "undefined")
                     {
                         this.lastFocusField = e.target;
+
+                        console.log("inputType : " + e.inputType);
+                        keyMode = e.inputType;
                     }
+
+                    // deleteContentBackward
 
                     var filterSearch = [];
                     var update = false;
@@ -179,10 +192,34 @@ function initComponent(app)
                         {
                             if (this.config.columns[i].search.type === "input")
                             {
-                                if (this.config.columns[i].search.value !== "" && this.config.columns[i].search.value.length >= this.config.columns[i].search.minLength)
+                                if (keyMode !== "deleteContentBackward")
                                 {
-                                    filterSearch[filterSearch.length - 1] = this.config.columns[i].search.value;
-                                    update = true;
+                                    if (this.config.columns[i].search.value !== "" && this.config.columns[i].search.value.length >= this.config.columns[i].search.minLength)
+                                    {
+                                        filterSearch[filterSearch.length - 1] = this.config.columns[i].search.value;
+                                        update = true;
+                                    }
+                                }
+                                else
+                                {
+                                    if (this.config.columns[i].search.value.length >= this.config.columns[i].search.minLength)
+                                    {
+                                        filterSearch[filterSearch.length - 1] = this.config.columns[i].search.value;
+                                        update = true;
+                                    }
+                                    //  IN CASE OF SEARCH LENGHT IS BELOW WE SET THE VALUE TO EMPTY
+                                    else
+                                    {
+                                        filterSearch[filterSearch.length - 1] = "";
+                                        update = true;
+                                    }
+                                    /*
+                                    if (this.config.columns[i].search.value !== "")
+                                    {
+                                        filterSearch[filterSearch.length - 1] = this.config.columns[i].search.value;
+                                        update = true;
+                                    }
+                                    */
                                 }
                             }
 
@@ -228,12 +265,17 @@ function initComponent(app)
                     //
                     this.loading = true;
 
-                    //  BUILD SEARCH PARAMETER
+                    //  RESET 
                     //
-                    var searchParm = "[]";
+                    this.searchMode = "";
+
+                    //  BUILD SEARCH PARAMETER
+                    //                    
+                    var searchParm = "";
                     if (this.globalSearch !== "")
                     {
-                        searchParm = '["' + this.globalSearch + '"]';
+                        searchParm = this.globalSearch;
+                        this.searchMode = "GLOBAL";
                     }
                     else if (this.columnnSearch.filter(function(o)
                         {
@@ -241,6 +283,7 @@ function initComponent(app)
                         }).length !== 0)
                     {
                         searchParm = JSON.stringify(this.columnnSearch);
+                        this.searchMode = "MULTI";
                     }
 
                     //  AJAX CALL
@@ -253,7 +296,8 @@ function initComponent(app)
                                 pageno: this.pageno,
                                 per_page: this.config_recordsPerPage,
                                 order: JSON.stringify(this.order),
-                                search: searchParm
+                                search: searchParm,
+                                search_mode: this.searchMode
                             },
                             url: this.config.dataSourceUrl,
                             responseType: 'stream',
@@ -292,22 +336,24 @@ function initComponent(app)
                                 that.lastFocusField.focus();
                                 that.lastFocusField = "";
                             }
-                        }, 500, that
+                        }, 101, that
                     );
-                    /*
-                    this.$nextTick(() =>
-                    {
-                        this.loading = false;
+                },
+                /*
+                    DEFER NAVIGATION
+                */
+                _deferNavigate: function(e, page)
+                {
+                    this.previousSearch = "";
+                    this._searchFilter();
 
-                        //  IF LAST FOCUS ELEMENT FOCUS IS DEFINED WE SET THE FOCUS BACK AGAIN
-                        //
-                        if (this.lastFocusField !== "")
+                    var that = this;
+                    setTimeout(
+                        function(t)
                         {
-                            this.lastFocusField.focus();
-                            this.lastFocusField = "";
-                        }
-
-                    });*/
+                            that._navigate(page);
+                        }, 501, that
+                    );
                 },
                 /*
                     NAVIGATE, CLICK ON PAGER
@@ -537,6 +583,34 @@ function initComponent(app)
                     }
 
                     this._loadData();
+                },
+                _highlight: function(v, ndx)
+                {
+                    // return "_<b>zz</b>" + v + "_";
+                    // return v;
+
+                    if (typeof this.config.columns[ndx].search === "undefined")
+                    {
+                        return v;
+                    }
+
+                    if (this.config.columns[ndx].search.value === "")
+                    {
+                        return v;
+                    }
+
+                    if (this.config.columns[ndx].search.type === "input" && this.config.columns[ndx].search.value.length >= this.config.columns[ndx].search.minLength)
+                    {
+                        var regex = new RegExp("" + this.config.columns[ndx].search.value + "", "gmi");
+                        var r = v.match(regex);
+
+                        if (r !== null)
+                        {
+                            v = v.replace(regex, "<mark class='alert-success'>" + this.config.columns[ndx].search.value + "</mark>");
+                        }
+                    }
+
+                    return v;
                 }
             }
         }

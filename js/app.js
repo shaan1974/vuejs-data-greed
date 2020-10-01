@@ -31,7 +31,8 @@ function init_vue()
                             "to": "to"
                         },
                         "globalSearch": "Global Search",
-                        "resetSearch": "Reset Search"
+                        "resetSearch": "Reset Search",
+                        "noRecordsFound": "No records founds"
                     },
                     "css":
                     {
@@ -172,6 +173,7 @@ function init_vue()
                         }
                     }],
                     "responsive": true,
+                    "globaSearchMinLength": 4,
                     "globalSearch": true
                 }
             };

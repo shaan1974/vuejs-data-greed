@@ -16,7 +16,7 @@ var templateDataGreed = `
                 <!-- GLOBAL SEARCH -->
                 <div class="form-group p2 ml-auto">
                     <input class="form-control form-control-sm mb-2 mr-2" type="text" placeholder="..." v-model="this.globalSearch" v-on:focus="this._resetFilter('COLUMNS')">
-                    <button class="btn btn-sm btn-primary mb-2" v-html="config.labels.globalSearch" v-on:click.prevent="this._navigate(1)"></button>
+                    <button class="btn btn-sm btn-primary mb-2" v-html="config.labels.globalSearch" v-on:click.prevent="this._navigate(1)" :disabled="this.globalSearch.length<this.config.globaSearchMinLength"></button>
                 </div>
                 <!-- /GLOBAL SEARCH -->
 
@@ -55,11 +55,12 @@ var templateDataGreed = `
                             <template v-if="d.search">
 
                                 <template v-if="d.search.type === 'input'">
-                                    <input class="form-control form-control-sm" type="text" placeholder="..." v-model="d.search.value" v-on:input="this._searchFilter($event)" v-on:focus="this._resetFilter('GLOBAL')">
+                                    <input class="form-control form-control-sm search-box" type="text" placeholder="..." v-model="d.search.value" v-on:input="this._searchFilter($event,index)" v-on:focus="this._resetFilter('GLOBAL')">
+                                    <span v-if="d.search.value.length>=d.search.minLength" v-on:click="d.search.value='';this._deferNavigate($event,1);" class="eraseIcon">&times;</span>
                                 </template>
 
                                 <template v-else-if="d.search.type === 'select'">
-                                    <select id="inputState" class="form-control form-control-sm" :class="[d.search.css]" v-model="d.search.value" v-on:change="this._searchFilter($event)" v-on:focus="this._resetFilter('GLOBAL')">
+                                    <select id="inputState" class="form-control form-control-sm" :class="[d.search.css]" v-model="d.search.value" v-on:change="this._searchFilter($event,index)" v-on:focus="this._resetFilter('GLOBAL')">
                                         <option></option>
                                         <option v-for="(l,index) in d.search.dictionnary" :value="l.value">{{l.text}}</option>
                                     </select>
@@ -79,14 +80,15 @@ var templateDataGreed = `
             <tbody>
                 
                 <div :class="[ this.loading ? 'dynamicTableLoader' : 'noDynamicTableLoader' ]"></div>
-
+                
+                <!-- RECORDS -->
                 <tr v-for="(d,main_index) in records">
 
                     <template v-for="(e,index) in d">
                         
                         <td v-if="config.columns[index].visibility" :class="config.columns[index].class" :data-label="this.config.columns[index].name">
 
-                            <span v-if="typeof this.config.columns[index].fctTransform ==='undefined'" v-html="e"></span>
+                            <span v-if="typeof this.config.columns[index].fctTransform ==='undefined'" v-html="this._highlight(e,index)"></span>
                             <span v-else v-html="this.config.columns[index].fctTransform(e,records[main_index])"></span>
     
                         </td>
@@ -94,6 +96,13 @@ var templateDataGreed = `
                     </template>
 
                 </tr>
+                <!-- /RECORDS -->
+
+                <!-- NO RECORDS -->
+                <tr v-if="records.length===0">
+                    <td class="text-center" :colspan="this.config.columns.filter( function(o) { if (o.visibility===true) return o;} ).length" v-html="config.labels.noRecordsFound"></td>
+                </tr>
+                <!-- /NO RECORDS -->
 
                 <template v-if="parseInt(records.length)!=parseInt(this.config_recordsPerPage) && this.config.displayEmptyLines">
                 
@@ -140,6 +149,5 @@ var templateDataGreed = `
     columnnSearch : "{{columnnSearch}}"
     <hr/>
     {{classColumn}}
-
     
 `;

@@ -2,7 +2,11 @@
 
 Still on developpement the purpose it to have a DataTable that handle Ajax calls.
 
-#versions
+**versions :**
+
+1.1a
+
+Update ReadMe.
 
 1.1
 

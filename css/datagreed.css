@@ -279,6 +279,10 @@
 
 /* FILTER SEARCH */
 
+.dataGreed .columnFilterAccepted {
+    background-color: #d4edda;
+}
+
 .dataGreed .filtered {
     backdrop-filter: brightness(95%);
 }

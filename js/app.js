@@ -30,7 +30,8 @@ function init_vue()
                             "from": "From",
                             "to": "to"
                         },
-                        "search": "Search"
+                        "globalSearch": "Global Search",
+                        "resetSearch": "Reset Search"
                     },
                     "css":
                     {
@@ -57,7 +58,8 @@ function init_vue()
                         "search":
                         {
                             "type": "input",
-                            "value": ""
+                            "value": "",
+                            "minLength": 3
                         }
                     },
                     {
@@ -73,7 +75,8 @@ function init_vue()
                         "search":
                         {
                             "type": "input",
-                            "value": ""
+                            "value": "",
+                            "minLength": 3
                         }
                     },
                     {
@@ -89,7 +92,8 @@ function init_vue()
                         "search":
                         {
                             "type": "input",
-                            "value": ""
+                            "value": "",
+                            "minLength": 3
                         }
                     },
                     {
@@ -109,7 +113,8 @@ function init_vue()
                         "search":
                         {
                             "type": "input",
-                            "value": ""
+                            "value": "",
+                            "minLength": 3
                         }
                     },
                     {
@@ -121,7 +126,8 @@ function init_vue()
                         "search":
                         {
                             "type": "input",
-                            "value": ""
+                            "value": "",
+                            "minLength": 3
                         }
                     },
                     {

@@ -38,9 +38,49 @@
 		$conn = mysqli_connect($db_host,$db_user,$db_pass,$db_database) or die('Unable to establish a DB connection');
 		mysqli_query($conn,"SET names UTF8");
 
+    //  WHERE
+    //
+        $where="";
+        $jsonWhere = json_decode($_POST['search'],true);
+        if ( count($jsonWhere)===0)
+        {
+            $where="";
+        }
+        else if ( count($jsonWhere)===1)
+        {
+            $w = array();
+            for($j=0;$j<count($columns->names);$j++)
+            {
+                if ( $columns->types[$j]!=="NONE")
+                {
+                    array_push( $w , " ".$columns->names[$j]." like '%".$jsonWhere[0]."%'" );
+                }
+            }
+            $where=" WHERE ".implode(" OR " , $w). " ";
+        }
+        else
+        {
+            $w = array();
+            for($j=0;$j<count($columns->names);$j++)
+            {
+                if ( $columns->types[$j]!=="NONE" && $jsonWhere[$j]!="" )
+                {
+                    if ( $columns->search[$j]==="LIKE")
+                    {
+                        array_push( $w , " ".$columns->names[$j]." like '%".$jsonWhere[$j]."%'" );
+                    }
+                    else if ( $columns->search[$j]==="EQ")
+                    {
+                        array_push( $w , " ".$columns->names[$j]." = '".$jsonWhere[$j]."'" );
+                    }
+                }
+            }
+            $where=" WHERE ".implode(" AND " , $w). " ";
+        }
+
     //  GET TOTAL ROWS - TOTAL PAGES
     //
-        $total_pages_sql = "SELECT COUNT(*) FROM _users";
+        $total_pages_sql = "SELECT COUNT(*) FROM  _users ".$where."";
         $result = mysqli_query($conn,$total_pages_sql);
 
         $total_rows = mysqli_fetch_array($result)[0];
@@ -48,7 +88,7 @@
     
     //  GET DATA RELATED TO THE RANGE
     //
-        $sql = "SELECT id,fullname,nickname,birthdate,age,email,salary,gender FROM _users {{WHERE}} {{ORDER}} LIMIT $offset, $no_of_records_per_page";
+        $sql = "SELECT id,fullname,nickname,birthdate,age,email,salary,gender FROM _users ".$where." {{ORDER}} LIMIT $offset, $no_of_records_per_page";
 
     //  REPLACE ORDER
     //
@@ -64,11 +104,7 @@
 
         // $sql = str_replace("{{ORDER}}"," order by id asc " , $sql);
         $sql = str_replace("{{ORDER}}"," ".$orderStatement." " , $sql);
-
-    //  REPLACE WHERE
-    //
-        $sql = str_replace("{{WHERE}}", "" , $sql);
-
+        
     //  GET RESULT
     //
         $res_data = mysqli_query($conn,$sql);        
@@ -83,5 +119,7 @@
     "totalRows" : <?php echo $total_rows; ?>,
     "totalPages" : <?php echo $total_pages; ?>,
     "records" : <?php echo json_encode($emparray); ?>,
-    "query" : "<?php echo $sql; ?>"
+    "query" : "<?php echo $sql; ?>",
+    "where" : "<?php echo $where; ?>",
+    "total_pages_sql" : "<?php echo $total_pages_sql; ?>"
 }

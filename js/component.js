@@ -16,7 +16,10 @@ function initComponent(app)
                     "loading": false,
                     "order": [],
                     "config_recordsPerPage": 0,
-                    "globalSearch": ""
+                    "globalSearch": "",
+                    "columnnSearch": [],
+                    "previousSearch": "",
+                    "lastFocusField": ""
                 };
             },
             props: ['config'],
@@ -44,7 +47,31 @@ function initComponent(app)
                 //  LOAD DATA FOR FIRST TIME
                 //
                 this._loadData();
+
+                //  BUIKD FILTERS
+                //
+                this._searchFilter();
             },
+            /*watch:
+            {
+                ["columnnSearch"]: function(cVal, oVal)
+                {
+                    console.log("C CHANGE");
+
+                    if (typeof cVal === "string" && typeof oVal === "object")
+                    {
+                        // init
+                        console.log("INIT");
+                    }
+                    else if (typeof cVal === "string" && typeof oVal === "string")
+                    {
+                        console.log("SEARCH");
+                        console.log("CURRENT " + cVal);
+                        console.log("OLD : " + oVal);
+
+                    }
+                }
+            },*/
             computed:
             {
                 "dataFrom": function()
@@ -54,21 +81,61 @@ function initComponent(app)
                 "datatTo": function()
                 {
                     return ((this.pageno - 1) * this.config_recordsPerPage) + this.config_recordsPerPage;
+                },
+                /*
+                    BUILD CLASS FOR HEADER TH TO DISPLAY A CLASS TO INDICATE IF FILTER IS TAKEN IN COUNT OR NOT
+                */
+                "classColumn": function()
+                {
+                    return this.config.columns.map(function(o)
+                    {
+                        if (typeof o.search !== "undefined")
+                        {
+                            if (o.search.type === "select" && o.search.value != "")
+                            {
+                                return "columnFilterAccepted";
+                            }
+                            else if (o.search.type === "input" && (o.search.value !== "" && o.search.value.length >= o.search.minLength))
+                            {
+                                return "columnFilterAccepted";
+                            }
+                            else
+                            {
+                                return "";
+                            }
+                        }
+                        else
+                        {
+                            return "";
+                        }
+                    });
                 }
             },
-            /*,
-                        watch:
-                        {
-                            ["globalSearch"]: function(val)
-                            {
-                                console.log("CHANGE... GS");
-                            }
-                        },*/
             methods:
             {
+                _resetSearch: function()
+                {
+                    this.previousSearch = "";
+                    this.globalSearch = "";
+
+                    for (var i = 0; i < this.config.columns.length; i++)
+                    {
+                        if (typeof this.config.columns[i].search !== "undefined")
+                        {
+                            this.config.columns[i].search.value = "";
+                        }
+
+                        this.columnnSearch[i] = "";
+                    }
+
+                    this.$nextTick(() =>
+                    {
+                        this._navigate(1);
+                    });
+                },
                 /*
-                    WHEN GLOBAL SEARCH FOCUS WE RESET COLUMNS FILTERS VALUES ( COLUMNS)
-                    WHEN COLUMNS IS FOCUS,CLICK GLOBAL SEACH IS SET EMPTY (GLOBAL)
+                    "COLUMNS" - WHEN GLOBAL SEARCH FOCUS WE RESET COLUMNS FILTERS VALUES
+                    "GLOBAL"  - WHEN COLUMNS IS FOCUS,CLICK GLOBAL SEACH IS SET EMPTY
                 */
                 _resetFilter: function(m)
                 {
@@ -92,9 +159,17 @@ function initComponent(app)
                 /*
                     BUILD FILTER FOR EACH COLUMNS
                 */
-                _searchFilter: debounce(function()
+                _searchFilter: debounce(function(e)
                 {
+                    //  IF FILTER IS CALLED BY AN INPUT WE SET THIS INPUT INTO TEMP VAR
+                    //                    
+                    if (typeof e !== "undefined")
+                    {
+                        this.lastFocusField = e.target;
+                    }
+
                     var filterSearch = [];
+                    var update = false;
 
                     for (var i = 0; i < this.config.columns.length; i++)
                     {
@@ -102,15 +177,46 @@ function initComponent(app)
 
                         if (typeof this.config.columns[i].search !== "undefined")
                         {
-                            if (this.config.columns[i].search.value !== "")
+                            if (this.config.columns[i].search.type === "input")
                             {
-                                filterSearch[filterSearch.length - 1] = this.config.columns[i].search.value;
+                                if (this.config.columns[i].search.value !== "" && this.config.columns[i].search.value.length >= this.config.columns[i].search.minLength)
+                                {
+                                    filterSearch[filterSearch.length - 1] = this.config.columns[i].search.value;
+                                    update = true;
+                                }
+                            }
+
+                            if (this.config.columns[i].search.type === "select")
+                            {
+                                if (this.config.columns[i].search.value !== "")
+                                {
+                                    filterSearch[filterSearch.length - 1] = this.config.columns[i].search.value;
+                                    update = true;
+                                }
                             }
                         }
                     }
 
-                    console.log(filterSearch);
-                    console.log(JSON.stringify(filterSearch));
+                    if (typeof this.previousSearch === "object")
+                    {
+                        if (JSON.stringify(this.previousSearch) === JSON.stringify(filterSearch))
+                        {
+                            return true;
+                        }
+                    }
+
+                    // console.log(filterSearch);
+                    // console.log(update);
+                    // console.log(JSON.stringify(filterSearch));
+
+                    // this.columnnSearch = JSON.stringify(filterSearch);
+                    this.columnnSearch = filterSearch;
+
+                    if (update === true)
+                    {
+                        this._navigate(1);
+                        this.previousSearch = filterSearch;
+                    }
 
                 }, 500),
                 /*
@@ -118,8 +224,27 @@ function initComponent(app)
                 */
                 _loadData: function()
                 {
+                    //  SET LOADER ACTIVE
+                    //
                     this.loading = true;
 
+                    //  BUILD SEARCH PARAMETER
+                    //
+                    var searchParm = "[]";
+                    if (this.globalSearch !== "")
+                    {
+                        searchParm = '["' + this.globalSearch + '"]';
+                    }
+                    else if (this.columnnSearch.filter(function(o)
+                        {
+                            if (o !== "") return o;
+                        }).length !== 0)
+                    {
+                        searchParm = JSON.stringify(this.columnnSearch);
+                    }
+
+                    //  AJAX CALL
+                    //
                     axios(
                         {
                             method: 'post',
@@ -127,7 +252,8 @@ function initComponent(app)
                             {
                                 pageno: this.pageno,
                                 per_page: this.config_recordsPerPage,
-                                order: JSON.stringify(this.order)
+                                order: JSON.stringify(this.order),
+                                search: searchParm
                             },
                             url: this.config.dataSourceUrl,
                             responseType: 'stream',
@@ -150,17 +276,38 @@ function initComponent(app)
 
                     this._buildPager();
 
-
                     var that = this;
 
                     //  REMOVE LOADER
-                    //
+                    //                    
                     setTimeout(
                         function(t)
                         {
                             that.loading = false;
+
+                            //  IF LAST FOCUS ELEMENT FOCUS IS DEFINED WE SET THE FOCUS BACK AGAIN
+                            //
+                            if (that.lastFocusField !== "")
+                            {
+                                that.lastFocusField.focus();
+                                that.lastFocusField = "";
+                            }
                         }, 500, that
                     );
+                    /*
+                    this.$nextTick(() =>
+                    {
+                        this.loading = false;
+
+                        //  IF LAST FOCUS ELEMENT FOCUS IS DEFINED WE SET THE FOCUS BACK AGAIN
+                        //
+                        if (this.lastFocusField !== "")
+                        {
+                            this.lastFocusField.focus();
+                            this.lastFocusField = "";
+                        }
+
+                    });*/
                 },
                 /*
                     NAVIGATE, CLICK ON PAGER
@@ -248,6 +395,11 @@ function initComponent(app)
                         }
 
                         this.pagination = pagination;
+                    }
+                    else
+                    {
+                        console.log("HERE BUILD PAGER");
+                        this.pagination = [];
                     }
                 },
                 /*

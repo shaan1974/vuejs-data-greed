@@ -6,14 +6,22 @@ var templateDataGreed = `
         
         <div v-if="this.config.globalSearch">
 
-            <!-- GLOBAL SEARCH -->
+            <!-- SEARCH -->
             <form class="form-inline">
+
+                <div class="form-group p2 mr-auto">
+                    <button class="btn btn-sm btn-primary mb-2" v-html="config.labels.resetSearch" v-on:click.prevent="this._resetSearch()"></button>
+                </div>
+
+                <!-- GLOBAL SEARCH -->
                 <div class="form-group p2 ml-auto">
                     <input class="form-control form-control-sm mb-2 mr-2" type="text" placeholder="..." v-model="this.globalSearch" v-on:focus="this._resetFilter('COLUMNS')">
-                    <button class="btn btn-sm btn-primary mb-2" v-html="config.labels.search"></button>
+                    <button class="btn btn-sm btn-primary mb-2" v-html="config.labels.globalSearch" v-on:click.prevent="this._navigate(1)"></button>
                 </div>
+                <!-- /GLOBAL SEARCH -->
+
             </form>
-            <!-- /GLOBAL SEARCH -->
+            <!-- /SEARCH -->
 
         </div>
         <table class='table' :class="[ config.css.table ? ''+config.css.table+'' : '' , config.verticalScroll ? 'scrollTableVertical' : '' , config.responsive ? 'rr' : '' ]">
@@ -41,17 +49,17 @@ var templateDataGreed = `
                     <template v-for="(d,index) in config.columns">
 
                         <th scope="col"  
-                            class="position-relative pl-3"                             
+                            class="position-relative pl-3" :class="classColumn[index]" 
                             v-if="config.columns[index].visibility">
                             
                             <template v-if="d.search">
 
                                 <template v-if="d.search.type === 'input'">
-                                    <input class="form-control form-control-sm" type="text" placeholder="..." v-model="d.search.value" v-on:input="this._searchFilter()" v-on:focus="this._resetFilter('GLOBAL')">
+                                    <input class="form-control form-control-sm" type="text" placeholder="..." v-model="d.search.value" v-on:input="this._searchFilter($event)" v-on:focus="this._resetFilter('GLOBAL')">
                                 </template>
 
                                 <template v-else-if="d.search.type === 'select'">
-                                    <select id="inputState" class="form-control form-control-sm" :class="d.search.css" v-model="d.search.value" v-on:change="this._searchFilter()" v-on:focus="this._resetFilter('GLOBAL')">
+                                    <select id="inputState" class="form-control form-control-sm" :class="[d.search.css]" v-model="d.search.value" v-on:change="this._searchFilter($event)" v-on:focus="this._resetFilter('GLOBAL')">
                                         <option></option>
                                         <option v-for="(l,index) in d.search.dictionnary" :value="l.value">{{l.text}}</option>
                                     </select>
@@ -87,9 +95,9 @@ var templateDataGreed = `
 
                 </tr>
 
-                <template v-if="records.length!=this.config_recordsPerPage && this.config.displayEmptyLines ">
+                <template v-if="parseInt(records.length)!=parseInt(this.config_recordsPerPage) && this.config.displayEmptyLines">
                 
-                    <tr v-for="n in (this.config_recordsPerPage.length)">
+                    <tr v-for="n in (this.config_recordsPerPage-this.records.length)">
 
                         <template v-for="n in (this.config.columns.length)">
                             <td v-if="config.columns[n-1].visibility">&#160;</td>
@@ -125,5 +133,13 @@ var templateDataGreed = `
         </div>
 
     </nav>
+
+    <hr/>
+    globalSearch : "{{globalSearch}}"
+    <br/>
+    columnnSearch : "{{columnnSearch}}"
+    <hr/>
+    {{classColumn}}
+
     
 `;

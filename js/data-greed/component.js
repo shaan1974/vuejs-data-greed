@@ -1,8 +1,33 @@
 /*jshint esversion: 6 */
-
-function initComponent(app)
+function initDataGreedComponent(vapp)
 {
-    app.component(
+    //  ADDITIONAL FUNCTION
+    //
+    window.___debounce = function(func)
+    {
+        var wait = arguments.length <= 1 || arguments[1] === undefined ? 100 : arguments[1];
+
+        var timeout = void 0;
+        return function()
+        {
+            var _this = this;
+
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++)
+            {
+                args[_key] = arguments[_key];
+            }
+
+            clearTimeout(timeout);
+            timeout = setTimeout(function()
+            {
+                func.apply(_this, args);
+            }, wait);
+        };
+    };
+
+    //  COMPONENT
+    //
+    vapp.component(
         'data-greed',
         {
             data: function()
@@ -27,9 +52,9 @@ function initComponent(app)
             template: '' + templateDataGreed + '',
             mounted: function()
             {
-                this.config_recordsPerPage = this.config.recordsPerPage;
-
-                console.log("COMPONENT MOUNTED.");
+                //  SET TO DATA VAR
+                //
+                this.config_recordsPerPage = this.config.options.recordsPerPage;
 
                 //  BUILD ORDER
                 //
@@ -77,17 +102,24 @@ function initComponent(app)
             {
                 "dataFrom": function()
                 {
-                    return ((this.pageno - 1) * this.config_recordsPerPage) + 1;
+                    return ((this.pageno - 1) * parseInt(this.config_recordsPerPage)) + 1;
                 },
                 "datatTo": function()
                 {
+                    var recordsPerPage = parseInt(this.config_recordsPerPage);
+
                     //  IN CASE OF TOTAL ROWS ARE BELOW RECORD PAGES
                     //
-                    if (this.totalRows < this.config_recordsPerPage)
+                    if (this.totalRows < recordsPerPage)
                     {
                         return this.totalRows;
                     }
-                    return ((this.pageno - 1) * this.config_recordsPerPage) + this.config_recordsPerPage;
+
+                    if (((this.pageno - 1) * recordsPerPage) + 1 < ((this.pageno - 1) * recordsPerPage) + 1 + recordsPerPage && (this.totalPages === parseInt(this.pageno)))
+                    {
+                        return this.totalRows;
+                    }
+                    return ((this.pageno - 1) * recordsPerPage) + recordsPerPage;
                 },
                 /*
                     BUILD CLASS FOR HEADER TH TO DISPLAY A CLASS TO INDICATE IF FILTER IS TAKEN IN COUNT OR NOT
@@ -120,6 +152,9 @@ function initComponent(app)
             },
             methods:
             {
+                /*
+                    RESET SEARCH
+                */
                 _resetSearch: function()
                 {
                     this.previousSearch = "";
@@ -148,7 +183,7 @@ function initComponent(app)
                 {
                     if (m === "COLUMNS")
                     {
-                        console.log("reset columns filters");
+                        // console.log("reset columns filters");
 
                         for (var i = 0; i < this.config.columns.length; i++)
                         {
@@ -166,7 +201,7 @@ function initComponent(app)
                 /*
                     BUILD FILTER FOR EACH COLUMNS
                 */
-                _searchFilter: debounce(function(e, ndx)
+                _searchFilter: ___debounce(function(e, ndx)
                 {
                     //  IF FILTER IS CALLED BY AN INPUT WE SET THIS INPUT INTO TEMP VAR
                     //          
@@ -175,7 +210,7 @@ function initComponent(app)
                     {
                         this.lastFocusField = e.target;
 
-                        console.log("inputType : " + e.inputType);
+                        // console.log("inputType : " + e.inputType);
                         keyMode = e.inputType;
                     }
 
@@ -299,7 +334,7 @@ function initComponent(app)
                                 search: searchParm,
                                 search_mode: this.searchMode
                             },
-                            url: this.config.dataSourceUrl,
+                            url: this.config.options.dataSourceUrl,
                             responseType: 'stream',
                         })
                         .then(this._getData);
@@ -444,7 +479,7 @@ function initComponent(app)
                     }
                     else
                     {
-                        console.log("HERE BUILD PAGER");
+                        // console.log("HERE BUILD PAGER");
                         this.pagination = [];
                     }
                 },
@@ -453,7 +488,8 @@ function initComponent(app)
                 */
                 _changePerPage: function(e)
                 {
-                    this.config_recordsPerPage = parseInt(e.target.value);
+                    // this.config_recordsPerPage = parseInt(e.target.value);
+                    this.config_recordsPerPage = e.target.value;
                     this._navigate(1);
                 },
                 /*

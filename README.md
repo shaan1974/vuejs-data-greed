@@ -6,9 +6,15 @@ Still on developpement the purpose it to have a DataTable that handle Ajax calls
 
 You can do a single order, just click on the header column, and if you want multi ordering press shift key with click.
 
+**Demo :**
+
+[Fully working demo](https://jsfiddle.net/shaan1974/L65p1ydc/)
+
 **Dependecies :**
 
-Right now no dependencies except Boostrap 4 for the look and fell.
+Right now no dependencies except : Boostrap 4 (for the look and fell) ,Axios.
+
+For the demo example we use also "momentjs" and "accouting.js" for the formating of data.
 
 **To do:**
 
@@ -20,9 +26,18 @@ Right now no dependencies except Boostrap 4 for the look and fell.
 - Jump to page.
 - If only one page max should not be the by page, but the max rows.
 - No records found message and update entries to 0 to 0
-- Ex on Jsfiddle.
 
 **versions :**
+
+1.3 ( Paradise city version)
+
+- Hightlight switch
+- Display total with entries.
+- Create options object.
+- Header over columns name to be able to group columns by categories.
+- Remove useless codes.
+- min version of the package.
+- Ex on Jsfiddle.
 
 1.2
 

@@ -9,7 +9,7 @@
     <meta name="keywords" content="">
     <meta name="description" content="">
 
-    <title>Vue DataGreed</title>
+    <title>VueJs - DataGreed</title>
 
     <link rel="icon" type="image/png" href="images/favico/favicon.png">
     <link rel="shortcut icon" href="images/favico/favicon.ico" type="image/x-icon">
@@ -21,16 +21,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment.min.js" integrity="sha512-Izh34nqeeR7/nwthfeE0SI3c8uhFSnqxV0sI9TvTcXiFJkMd6fB644O64BRq2P/LA/+7eRvCw4GmLsXksyTHBg==" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@next"></script>
 
-    <link rel="stylesheet" href="css/datagreed.css">
-    
 </head>
 
 <body>
 
-
     <div id="app">
-
-        "{{lg}}"
 
         <br/>
         <div class="container"> 
@@ -43,22 +38,17 @@
 
     </div>
 
-    <!-- PROTOTYPES -->
-    <script src="js/prototypes/event.js"></script>
-    <script src="js/prototypes/rhea/array.js"></script>
-    <script src="js/prototypes/rhea/element.js"></script>
-    <script src="js/prototypes/rhea/nodelist.js"></script>
-    <script src="js/prototypes/rhea/object.js"></script>
-
-    <!-- VANILLAJS ICE ICE BABY -->
-
-    <script src="js/vanilla-js/ready.js"></script>
-    <script src="js/vanilla-js/debounce.js"></script>
-    <script src="js/custom_bs4.js"></script>
+    <!-- DATA-GREED -->
+    
+    <!--
+    <script src="build/data-greed.min.js"></script>
+    -->
+    <link rel="stylesheet" href="css/datagreed.css">
+    <script src="js/data-greed/template.js"></script>
+    <script src="js/data-greed/component.js"></script>
+    
 
     <!-- VUE JS -->
-    <script src="js/template.js"></script>
-    <script src="js/component.js"></script>
     <script src="js/app.js"></script>
 
 </body>

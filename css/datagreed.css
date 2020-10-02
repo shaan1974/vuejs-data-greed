@@ -12,8 +12,13 @@
 }
 
 .dataGreedPagination div.entries select {
-    width: 75px;
+    width: 70px;
     cursor: pointer;
+    text-align-last: right;
+}
+
+.dataGreedPagination div.entries select option {
+    direction: rtl;
 }
 
 .dataGreedPagination div {
@@ -326,4 +331,36 @@
 .dataGreed mark {
     border-width: 1px;
     border-style: solid;
+}
+
+
+/* -- */
+
+.dataGreed .activeSorting {
+    backdrop-filter: brightness(95%);
+}
+
+
+/* -- */
+
+.dataGreedPagination .jump_page {
+    float: left;
+    display: inline-flex;
+}
+
+.dataGreedPagination .jump_page span {
+    display: inline-block;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.dataGreedPagination .jump_page select {
+    cursor: pointer;
+    width: 65px;
+    text-align-last: right;
+}
+
+.dataGreedPagination .jump_page select option {
+    direction: rtl;
 }

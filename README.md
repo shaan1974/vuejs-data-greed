@@ -8,7 +8,7 @@ You can do a single order, just click on the header column, and if you want mult
 
 **Demo :**
 
-[Fully working demo](https://jsfiddle.net/shaan1974/L65p1ydc/)
+[Fully working demo](https://jsfiddle.net/shaan1974/L65p1ydc/){:target="_blank"}
 
 **Dependecies :**
 
@@ -21,8 +21,15 @@ For the demo example we use also "momentjs" and "accouting.js" for the formating
 - Templates for others css Framework like Material, Bulma...
 - Page on top option.
 - No records found message and update entries to 1 to 0
+- Save status ( page, order, ect...)
 
 **versions :**
+
+1.4
+
+1.3b
+
+- Update Readme.
 
 1.3a
 - Jump to page.

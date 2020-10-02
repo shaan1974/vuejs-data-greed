@@ -19,15 +19,16 @@ For the demo example we use also "momentjs" and "accouting.js" for the formating
 **To do:**
 
 - Templates for others css Framework like Material, Bulma...
-- Options to show/hide : "Entries position", "Dropdown Page".
-- Extra Header in table to be able to group element.
 - Page on top option.
-- Change color of column when it ordered.
-- Jump to page.
-- If only one page max should not be the by page, but the max rows.
-- No records found message and update entries to 0 to 0
+- No records found message and update entries to 1 to 0
 
 **versions :**
+
+1.3a
+- Jump to page.
+- Options to show/hide : "Entries position", "Dropdown Page".
+- Change color of column when it ordered.
+- If only one page max should not be the by page, but the max rows.
 
 1.3 ( Paradise city version)
 

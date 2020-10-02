@@ -8,7 +8,7 @@ You can do a single order, just click on the header column, and if you want mult
 
 **Demo :**
 
-[Fully working demo](https://jsfiddle.net/shaan1974/L65p1ydc/){:target="_blank"}
+[Fully working demo](https://jsfiddle.net/shaan1974/L65p1ydc/)
 
 **Dependecies :**
 
@@ -25,7 +25,9 @@ For the demo example we use also "momentjs" and "accouting.js" for the formating
 
 **versions :**
 
-1.4
+1.3c
+
+- Update Readme.
 
 1.3b
 

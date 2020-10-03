@@ -47,7 +47,8 @@ var DataGreed = {
                     "header": [
                         "Group #1",
                         "Group #2"
-                    ]
+                    ],
+                    "page": "Page:"
                 },
                 "css":
                 {

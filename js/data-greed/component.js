@@ -303,6 +303,7 @@ function initDataGreedComponent(vapp)
                     //  RESET 
                     //
                     this.searchMode = "";
+                    var __searchMode = "";
 
                     //  BUILD SEARCH PARAMETER
                     //                    
@@ -310,7 +311,8 @@ function initDataGreedComponent(vapp)
                     if (this.globalSearch !== "")
                     {
                         searchParm = this.globalSearch;
-                        this.searchMode = "GLOBAL";
+                        // this.searchMode = "GLOBAL";
+                        __searchMode = "GLOBAL";
                     }
                     else if (this.columnnSearch.filter(function(o)
                         {
@@ -318,7 +320,8 @@ function initDataGreedComponent(vapp)
                         }).length !== 0)
                     {
                         searchParm = JSON.stringify(this.columnnSearch);
-                        this.searchMode = "MULTI";
+                        // this.searchMode = "MULTI";
+                        __searchMode = "MULTI";
                     }
 
                     //  AJAX CALL
@@ -332,7 +335,8 @@ function initDataGreedComponent(vapp)
                                 per_page: this.config_recordsPerPage,
                                 order: JSON.stringify(this.order),
                                 search: searchParm,
-                                search_mode: this.searchMode
+                                /*search_mode: this.searchMode*/
+                                search_mode: __searchMode
                             },
                             url: this.config.options.dataSourceUrl,
                             responseType: 'stream',
@@ -352,13 +356,27 @@ function initDataGreedComponent(vapp)
                     this.records = response.data.records;
                     this.totalPages = response.data.totalPages;
                     this.totalRows = response.data.totalRows;
+                    this.searchMode = response.data.searchMode;
 
                     this._buildPager();
 
                     var that = this;
 
                     //  REMOVE LOADER
-                    //                    
+                    //
+                    this.$nextTick(() =>
+                    {
+                        this.loading = false;
+
+                        //  IF LAST FOCUS ELEMENT FOCUS IS DEFINED WE SET THE FOCUS BACK AGAIN
+                        //
+                        if (this.lastFocusField !== "")
+                        {
+                            this.lastFocusField.focus();
+                            this.lastFocusField = "";
+                        }
+                    });
+                    /*      
                     setTimeout(
                         function(t)
                         {
@@ -373,6 +391,7 @@ function initDataGreedComponent(vapp)
                             }
                         }, 101, that
                     );
+                    */
                 },
                 /*
                     DEFER NAVIGATION
@@ -431,8 +450,11 @@ function initDataGreedComponent(vapp)
                         {
                             previous_link = (previous == 0) ? 1 : previous;
 
-                            pagination = this._buildPush(pagination, "" + this.config.labels.first + "", "1", false);
-                            pagination = this._buildPush(pagination, "" + this.config.labels.previous + "", "" + previous_link + "", false);
+                            if (current_page > 3)
+                            {
+                                pagination = this._buildPush(pagination, "" + this.config.labels.first + "", "1", false);
+                                pagination = this._buildPush(pagination, "" + this.config.labels.previous + "", "" + previous_link + "", false);
+                            }
 
                             for (i = (current_page - 2); i < current_page; i++)
                             {
@@ -622,6 +644,8 @@ function initDataGreedComponent(vapp)
                 },
                 _highlight: function(v, ndx)
                 {
+                    if (this.searchMode === "") return v;
+                    // console.log("ndx [" + ndx + "] " + v);
                     // return "_<b>zz</b>" + v + "_";
                     // return v;
 
@@ -630,23 +654,42 @@ function initDataGreedComponent(vapp)
                         return v;
                     }
 
+                    if (this.searchMode === "GLOBAL")
+                    {
+                        if (this.config.columns[ndx].search.type === "input")
+                        {
+                            var regex = new RegExp("" + this.globalSearch + "", "gmi");
+                            var r = v.match(regex);
+
+                            if (r !== null)
+                            {
+                                v = v.replace(regex, "<mark class='alert-success'>" + this.globalSearch + "</mark>");
+                            }
+                        }
+
+                        return v;
+                    }
+
                     if (this.config.columns[ndx].search.value === "")
                     {
                         return v;
                     }
 
-                    if (this.config.columns[ndx].search.type === "input" && this.config.columns[ndx].search.value.length >= this.config.columns[ndx].search.minLength)
+                    if (this.searchMode === "MULTI")
                     {
-                        var regex = new RegExp("" + this.config.columns[ndx].search.value + "", "gmi");
-                        var r = v.match(regex);
-
-                        if (r !== null)
+                        if (this.config.columns[ndx].search.type === "input" && this.config.columns[ndx].search.value.length >= this.config.columns[ndx].search.minLength)
                         {
-                            v = v.replace(regex, "<mark class='alert-success'>" + this.config.columns[ndx].search.value + "</mark>");
-                        }
-                    }
+                            var regex = new RegExp("" + this.config.columns[ndx].search.value + "", "gmi");
+                            var r = v.match(regex);
 
-                    return v;
+                            if (r !== null)
+                            {
+                                v = v.replace(regex, "<mark class='alert-success'>" + this.config.columns[ndx].search.value + "</mark>");
+                            }
+                        }
+
+                        return v;
+                    }
                 }
             }
         }

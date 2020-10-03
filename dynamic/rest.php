@@ -3,7 +3,7 @@
 	//	OUTPUT
 	//	
     header("Content-Type: application/json");
-    
+
     $_POST = json_decode(file_get_contents("php://input"),true);
 
     //  VARS
@@ -128,7 +128,5 @@
     "totalRows" : <?php echo $total_rows; ?>,
     "totalPages" : <?php echo $total_pages; ?>,
     "records" : <?php echo json_encode($emparray); ?>,
-    "query" : "<?php echo $sql; ?>",
-    "where" : "<?php echo $where; ?>",
-    "total_pages_sql" : "<?php echo $total_pages_sql; ?>"
+    "searchMode" : "<?php echo $_POST['search_mode']; ?>"
 }

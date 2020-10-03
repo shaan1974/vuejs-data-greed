@@ -67,7 +67,7 @@ var templateDataGreed = `
                             <template v-if="d.search">
 
                                 <template v-if="d.search.type === 'input'">
-                                    <input class="form-control form-control-sm search-box" type="text" placeholder="..." v-model="d.search.value" v-on:input="this._searchFilter($event,index)" v-on:focus="this._resetFilter('GLOBAL')">
+                                    <input class="form-control form-control-sm search-box" :class="[d.search.css]" type="text" placeholder="..." v-model="d.search.value" v-on:input="this._searchFilter($event,index)" v-on:focus="this._resetFilter('GLOBAL')">
                                     <span v-if="d.search.value.length>=d.search.minLength" v-on:click="d.search.value='';this._deferNavigate($event,1);" class="eraseIcon">&times;</span>
                                 </template>
 
@@ -101,7 +101,7 @@ var templateDataGreed = `
                         <td v-if="config.columns[index].visibility" :class="[config.columns[index].class , this.order.filter( function(o) { if(o.p===index) return o;} ).length === 1 && this.config.options.visualFilterForOrderedColumns ? 'activeSorting' : '' ]" :data-label="this.config.columns[index].name">
                             
                             <span v-if="typeof this.config.columns[index].fctTransform ==='undefined'" v-html="this._highlight(e,index)"></span>
-                            <span v-else v-html="this.config.columns[index].fctTransform(e,records[main_index])"></span>
+                            <span v-else v-html="this._highlight(this.config.columns[index].fctTransform(e,records[main_index]),index)"></span>
     
                         </td>
 
@@ -134,10 +134,10 @@ var templateDataGreed = `
 
     </div>
 
-    <nav aria-label="Page navigation example" class="dataGreedPagination">
+    <nav aria-label="Page navigation example" class="dataGreedPagination" v-if="records.length!==0">
 
         <span class="jump_page" v-if="this.config.options.jumpPage">
-            <span>Page:</span>
+            <span v-html="config.labels.page"></span>
             <select class="form-control form-control-sm" v-on:change="this._navigate($event.target.value)">
                 <option v-for="p in totalPages" :selected="p===parseInt(this.pageno)">{{p}}</option>
             </select>
@@ -158,9 +158,11 @@ var templateDataGreed = `
         </div>       
 
         <div v-if="this.config.options.entriesInfo">
-            &dash;&#160;<span v-html="config.labels.range.from"></span>&#160;{{dataFrom}}&#160;<span v-html="config.labels.range.to"></span>&#160;{{datatTo}} &#160;&dash;&#160;<span v-html="config.labels.total"></span> : {{this.totalRows}}
+                &dash;&#160;<span v-html="config.labels.range.from"></span>&#160;{{dataFrom}}&#160;<span v-html="config.labels.range.to"></span>&#160;{{datatTo}} &#160;&dash;&#160;<span v-html="config.labels.total"></span> : {{this.totalRows}}
         </div>
 
     </nav>
-    
+
+    <hr/>
+    {{searchMode}}
 `;

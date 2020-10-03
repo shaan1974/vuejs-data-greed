@@ -10,6 +10,42 @@ You can do a single order, just click on the header column, and if you want mult
 
 [Fully working demo](https://jsfiddle.net/shaan1974/L65p1ydc/)
 
+**Configuration :**
+
+Configuration are split into 4 sections : "options", "labels", "css" and "columns".
+
+- Options:
+    - "recordsPerPage" => Number of records visibles per page.
+    - "perPageOptions" => Values put in the selectbox per page.
+    - "dataSourceUrl" => Url to get data.
+    - "displayEmptyLines" => If return records are below records per page, it display blank row in the table.
+    - "horizontalScroll" => Horizontal scroll if needed
+    - "verticalScroll" => Vertical scroll if needed ( related to css )
+    - "responsive": true => If responsive on small devices
+    - "globaSearchMinLength" => Min chars for global search
+    - "globalSearch" => If global seach is visible or not
+    - "header" => Definition for global header upper columns names
+    - "visualFilterForOrderedColumns" => Show different color for ordered columns
+    - "jumpPage" => Jump to page selectbox visible or not.
+    - 'entriesInfo' => Entries infos visible or not.
+- Labels ( i expect you know what it's related )
+- Css
+    - "Table"
+    - "Pager position"
+- Columns
+    - "name" => Label.
+    - "fctTransform" => To be able to do transformation on colums.
+    - "class" => Defined class.
+    - "visibility" => or not
+    - "orderVisibility" => if ordering is visible.
+    - "orderMode" => Ordering base value (none,"asc","desc")
+    - "search" => Defined or not if no search
+        - "type" => "input", "select".
+        - "dictionnary" => For select.
+        - "css" => Dedicate css.
+        - "value" =>
+        - "minLength" => min char for searching ( input only )
+
 **Dependecies :**
 
 Right now no dependencies except : Boostrap 4 (for the look and fell) ,Axios.
@@ -18,12 +54,26 @@ For the demo example we use also "momentjs" and "accouting.js" for the formating
 
 **To do:**
 
-- Templates for others css Framework like Material, Bulma...
+- Templates for others css Framework like Material, Bulma... 
 - Page on top option.
-- No records found message and update entries to 1 to 0
 - Save status ( page, order, ect...)
+- position option for ( Jump to page, per page, from/to - Total)
+- Documentation.
+- Icons for First, Prev, Next, Last in place of label ( in fact label should be empty )
 
 **versions :**
+
+1.4 ( DMT - Do Ma Thang - 3YE )
+
+- If nothing has been found bottom tool ( pager...) are not shown.
+- Missing label "Page" for jump to page.
+- Correct bug for highlight in search by column mode.
+- Update rest return json
+- Global search Highlight found occurence.
+- Php builder to create min file. ( build that include all even the css, and a build without the css)
+- Update page to avoid to have buttons First,Prev if current page is below 3.
+- Add ccs for filter on input.
+- Update JsFiddle Ex.
 
 1.3c
 

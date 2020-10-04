@@ -46,6 +46,7 @@ Configuration are split into 5 sections : "options", "labels", "css" , "columns"
         - "css" => Dedicate css.
         - "value" =>
         - "minLength" => min char for searching ( input only )
+    - "switchVisibility" => Indicate if column visibility could be switch or not.    
 - Buttons
     - Struct "Action", "Label", "Css" , "Mode".
 ```
@@ -62,10 +63,16 @@ For the demo example we use also "momentjs" and "accouting.js" for the formating
 - Page on top option.
 - Save status ( page, order, ect...)
 - position option for ( Jump to page, per page, from/to - Total)
-- Documentation.
-- Icons for First, Prev, Next, Last in place of label ( in fact label should be empty )
+- Documentation ( more detail ).
 
 **Versions :**
+
+1.6 ( Rebel Yell - Billy Idol )
+
+- Code refactoring.
+- Forgot to remove "YY" for empty cells
+- Columns visibility switcher ( introduce new parameter in column to define if column could be switch or not).
+- Set class on button and pager if someone want to create additionnal classes to put icons in place of text.
 
 1.5 ( Du Hast - Rammstein )
 

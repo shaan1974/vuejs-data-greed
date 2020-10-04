@@ -4,24 +4,47 @@ var templateDataGreed = `
 
     <div class="dataGreed" :class="{ 'table-responsive horizontal-scrollable' : config.options.horizontalScroll }" v-on:selectstart.prevent.stop="">
         
-        <div v-if="this.config.options.globalSearch">
+        <div>
 
-            <!-- SEARCH -->
+            <!-- TOP TOOLBAR -->
             <form class="form-inline">
 
-                <div class="form-group p2 mr-auto">
-                    <button class="btn btn-sm btn-primary mb-2" v-html="config.labels.resetSearch" v-on:click.prevent="this._resetSearch()"></button>
+                <div class="form-group p2 mr-auto" v-if="this.config.options.globalSearch">
+                    <button class="btn-reset-search btn btn-sm btn-primary mb-2" v-html="config.labels.resetSearch" v-on:click.prevent="this._resetSearch()"></button>
                 </div>
 
                 <!-- GLOBAL SEARCH -->
-                <div class="form-group p2 ml-auto">
+                <div class="form-group p2 ml-auto" v-if="this.config.options.globalSearch">
                     <input class="form-control form-control-sm mb-2 mr-2" type="text" placeholder="..." v-model="this.globalSearch" v-on:focus="this._resetFilter('COLUMNS')">
-                    <button class="btn btn-sm btn-primary mb-2" v-html="config.labels.globalSearch" v-on:click.prevent="this._navigate(1)" :disabled="this.globalSearch.length<this.config.options.globaSearchMinLength"></button>
+                    <button class="btn-global-search btn btn-sm btn-primary mb-2" v-html="config.labels.globalSearch" v-on:click.prevent="this._navigate(1)" :disabled="this.globalSearch.length<this.config.options.globaSearchMinLength"></button>
                 </div>
                 <!-- /GLOBAL SEARCH -->
 
+                <!-- COLUMNS VISIBILITY -->
+                <div class="form-group p2" :class="this.config.options.globalSearch ? '' : 'ml-auto'">
+                    <div class="dropdown dropdown-cvisibility" :class="[ this.btnColumnsVisibility ? 'show' : '' ]">
+                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-on:click="this.btnColumnsVisibility=!this.btnColumnsVisibility" v-html="config.labels.visibility"></button>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton" :class="[ this.btnColumnsVisibility ? 'show' : '' ]">
+                            
+                            <template v-for="(d,index) in config.columns">
+                            
+                                <div class="form-check" v-if="d.switchVisibility">
+                                    <input class="form-check-input" type="checkbox" value="" :id="'defaultCheck'+index+''" :checked="d.visibility" v-on:change="d.visibility=!d.visibility">
+                                    <label class="form-check-label" :for="'defaultCheck'+index+''">{{d.name}}</label>
+                                </div>    
+
+                                <div class="clearfix" v-if="d.switchVisibility"></div>
+                            
+                            </template>
+
+                        </div>
+                    </div>                
+                </div>
+
+                <!-- /COLUMNS VISIBILITY -->
+
             </form>
-            <!-- /SEARCH -->
+            <!-- /TOP TOOLBAR -->
 
         </div>
         <table class='table' :class="[ config.css.table ? ''+config.css.table+'' : '' , config.options.verticalScroll ? 'scrollTableVertical' : '' , config.options.responsive ? 'rr' : '' ]">
@@ -140,7 +163,7 @@ var templateDataGreed = `
                             <td v-if="config.columns[n-1].visibility">&#160;</td>
                         </template>
 
-                        <td v-if="config.buttons.length!==0">YY</td>
+                        <td v-if="config.buttons.length!==0">&#160;</td>
 
                     </tr>
 
@@ -163,7 +186,7 @@ var templateDataGreed = `
 
         <ul class="pagination pagination-sm" :class="this.config.css.pagerPosition">        
             <li v-for="p in pagination" class="page-item" :class="[ p.active ? 'active' : '' ]">
-                <a class="page-link" href="" v-on:click.prevent="this._navigate(p.v)">{{p.lbl}}</a>
+                <a class="page-link" :class="p.aclass" href="" v-on:click.prevent="this._navigate(p.v)">{{p.lbl}}</a>
             </li>
         </ul>
         

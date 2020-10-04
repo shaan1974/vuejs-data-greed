@@ -45,7 +45,8 @@ function initDataGreedComponent(vapp)
                     "columnnSearch": [],
                     "previousSearch": "",
                     "lastFocusField": "",
-                    "searchMode": ""
+                    "searchMode": "",
+                    "btnColumnsVisibility": false
                 };
             },
             emits: ['callback'],
@@ -155,10 +156,10 @@ function initDataGreedComponent(vapp)
             },
             methods:
             {
-                _none: function()
+                /*_none: function()
                 {
                     console.log("NONE");
-                },
+                },*/
                 /*
                     RESET SEARCH
                 */
@@ -364,14 +365,17 @@ function initDataGreedComponent(vapp)
                     document.activeElement.blur();
 
                     // console.log(response.data);
+                    /*
                     this.records = response.data.records;
                     this.totalPages = response.data.totalPages;
                     this.totalRows = response.data.totalRows;
                     this.searchMode = response.data.searchMode;
+                    */
+                    Object.assign(this, response.data);
 
                     this._buildPager();
 
-                    var that = this;
+                    // var that = this;
 
                     //  REMOVE LOADER
                     //
@@ -432,13 +436,18 @@ function initDataGreedComponent(vapp)
                 /*
                     BUILD INTERNAL DATA FOR PAGER
                 */
-                _buildPush: function(o, a, b, c)
+                _buildPush: function(o, a, b, c, ac)
                 {
+                    if (typeof ac === "undefined")
+                    {
+                        ac = "";
+                    }
                     o.push(
                     {
                         "lbl": "" + a + "",
                         "v": "" + b + "",
-                        "active": c
+                        "active": c,
+                        "aclass": ac
                     });
                     return o;
                 },
@@ -464,8 +473,8 @@ function initDataGreedComponent(vapp)
 
                             if (current_page > 3)
                             {
-                                pagination = this._buildPush(pagination, "" + this.config.labels.first + "", "1", false);
-                                pagination = this._buildPush(pagination, "" + this.config.labels.previous + "", "" + previous_link + "", false);
+                                pagination = this._buildPush(pagination, "" + this.config.labels.first + "", "1", false, "p-first");
+                                pagination = this._buildPush(pagination, "" + this.config.labels.previous + "", "" + previous_link + "", false, "p-prev");
                             }
 
                             for (i = (current_page - 2); i < current_page; i++)
@@ -505,8 +514,8 @@ function initDataGreedComponent(vapp)
                         {
                             next_link = (i > total_pages) ? total_pages : i;
 
-                            pagination = this._buildPush(pagination, this.config.labels.next, (current_page + 1), false);
-                            pagination = this._buildPush(pagination, this.config.labels.last, total_pages, false);
+                            pagination = this._buildPush(pagination, this.config.labels.next, (current_page + 1), false, "p-next");
+                            pagination = this._buildPush(pagination, this.config.labels.last, total_pages, false, "p-last");
                         }
 
                         this.pagination = pagination;
@@ -666,12 +675,14 @@ function initDataGreedComponent(vapp)
                         return v;
                     }
 
+                    var regex, r;
+
                     if (this.searchMode === "GLOBAL")
                     {
                         if (this.config.columns[ndx].search.type === "input")
                         {
-                            var regex = new RegExp("" + this.globalSearch + "", "gmi");
-                            var r = v.match(regex);
+                            regex = new RegExp("" + this.globalSearch + "", "gmi");
+                            r = v.match(regex);
 
                             if (r !== null)
                             {
@@ -691,8 +702,8 @@ function initDataGreedComponent(vapp)
                     {
                         if (this.config.columns[ndx].search.type === "input" && this.config.columns[ndx].search.value.length >= this.config.columns[ndx].search.minLength)
                         {
-                            var regex = new RegExp("" + this.config.columns[ndx].search.value + "", "gmi");
-                            var r = v.match(regex);
+                            regex = new RegExp("" + this.config.columns[ndx].search.value + "", "gmi");
+                            r = v.match(regex);
 
                             if (r !== null)
                             {

@@ -53,7 +53,8 @@ var DataGreed = {
                     {
                         "edit": "E",
                         "remove": "R"
-                    }
+                    },
+                    "visibility": "Visibility"
                 },
                 "css":
                 {
@@ -66,7 +67,8 @@ var DataGreed = {
                     "class": "",
                     "visibility": true,
                     "orderVisibility": true,
-                    "orderMode": "asc"
+                    "orderMode": "asc",
+                    "switchVisibility": true
                 },
                 {
                     "name": "C #B",
@@ -79,7 +81,8 @@ var DataGreed = {
                         "type": "input",
                         "value": "",
                         "minLength": 3
-                    }
+                    },
+                    "switchVisibility": true
                 },
                 {
                     "name": "C #C",
@@ -96,7 +99,8 @@ var DataGreed = {
                         "type": "input",
                         "value": "",
                         "minLength": 3
-                    }
+                    },
+                    "switchVisibility": true
                 },
                 {
                     "name": "C #D",
@@ -113,7 +117,8 @@ var DataGreed = {
                         "type": "input",
                         "value": "",
                         "minLength": 3
-                    }
+                    },
+                    "switchVisibility": true
                 },
                 {
                     "name": "C #E",
@@ -134,7 +139,8 @@ var DataGreed = {
                         "type": "input",
                         "value": "",
                         "minLength": 3
-                    }
+                    },
+                    "switchVisibility": true
                 },
                 {
                     "name": "C #F",
@@ -147,7 +153,8 @@ var DataGreed = {
                         "type": "input",
                         "value": "",
                         "minLength": 3
-                    }
+                    },
+                    "switchVisibility": true
                 },
                 {
                     "name": "C #G",
@@ -164,14 +171,15 @@ var DataGreed = {
                         return accounting.formatMoney("" + s + "", options);
                     },
                     "class": "text-right text-success",
-                    "visibility": true,
+                    "visibility": false,
                     "orderVisibility": true,
-                    "orderMode": ""
+                    "orderMode": "",
+                    "switchVisibility": true
                 },
                 {
                     "name": "C #H",
                     "class": "",
-                    "visibility": true,
+                    "visibility": false,
                     "orderVisibility": false,
                     "orderMode": "",
                     "search":
@@ -188,7 +196,8 @@ var DataGreed = {
                         }],
                         "css": "mw75px pl-1 pr-0",
                         "value": ""
-                    }
+                    },
+                    "switchVisibility": false
                 }],
                 "buttons": [
                 {

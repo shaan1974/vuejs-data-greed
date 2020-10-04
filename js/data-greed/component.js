@@ -48,6 +48,7 @@ function initDataGreedComponent(vapp)
                     "searchMode": ""
                 };
             },
+            emits: ['callback'],
             props: ['config'],
             template: '' + templateDataGreed + '',
             mounted: function()
@@ -77,6 +78,8 @@ function initDataGreedComponent(vapp)
                 //  BUIKD FILTERS
                 //
                 this._searchFilter();
+
+                // console.log(this);
             },
             /*watch:
             {
@@ -152,6 +155,10 @@ function initDataGreedComponent(vapp)
             },
             methods:
             {
+                _none: function()
+                {
+                    console.log("NONE");
+                },
                 /*
                     RESET SEARCH
                 */
@@ -206,12 +213,16 @@ function initDataGreedComponent(vapp)
                     //  IF FILTER IS CALLED BY AN INPUT WE SET THIS INPUT INTO TEMP VAR
                     //          
                     var keyMode = "";
+
                     if (typeof e !== "undefined")
                     {
-                        this.lastFocusField = e.target;
+                        if (typeof e === "object")
+                        {
+                            this.lastFocusField = e.target;
 
-                        // console.log("inputType : " + e.inputType);
-                        keyMode = e.inputType;
+                            // console.log("inputType : " + e.inputType);
+                            keyMode = e.inputType;
+                        }
                     }
 
                     // deleteContentBackward
@@ -398,6 +409,7 @@ function initDataGreedComponent(vapp)
                 */
                 _deferNavigate: function(e, page)
                 {
+                    this.records = [];
                     this.previousSearch = "";
                     this._searchFilter();
 
@@ -689,6 +701,30 @@ function initDataGreedComponent(vapp)
                         }
 
                         return v;
+                    }
+                },
+                /*
+                    IF BUTTONS ARE DEFINED ACTIONS ARE TREATHED HERE
+                */
+                _buttons: function(b, d)
+                {
+                    //  REMOVE BLUR ON BUTTON
+                    //
+                    document.activeElement.blur();
+
+                    //  GET REAL ARRAY OBJECT
+                    //
+                    d = JSON.parse(JSON.stringify(d));
+
+                    //  IF FUNCTION RUN IT OR EMIT EVENT TO PARENT
+                    //
+                    if (typeof b.mode === "function")
+                    {
+                        b.mode(d);
+                    }
+                    else
+                    {
+                        this.$emit(this.$options.emits[0], b.action, d);
                     }
                 }
             }

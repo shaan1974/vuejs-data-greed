@@ -30,8 +30,14 @@
         <br/>
         <div class="container"> 
             <div class="card">
-                <div class="card-body">           
-                <data-greed v-bind:config="dataGreedConfig"></data-greed>
+                <div class="card-body">  
+                
+                <template v-if="false">
+                <button v-on:click="this.$refs['main-data-greed'].globalSearch='12';">WX</button>
+                <hr/>
+                </template>
+
+                <data-greed ref="main-data-greed" v-bind:config="dataGreedConfig" v-on:callback="getBtnCall"></data-greed>               
                 </div>
             </div>
         </div>
@@ -40,18 +46,18 @@
 
     <!-- DATA-GREED -->
 
-    <!--
     <script src="build/data-greed.js"></script>    
-    -->
 
     <!--
     <link rel="stylesheet" href="css/datagreed.css">
     <script src="build/data-greed-no-css.js"></script>
     -->
-    
+
+    <!--    
     <link rel="stylesheet" href="css/datagreed.css">
     <script src="js/data-greed/template.js"></script>
     <script src="js/data-greed/component.js"></script>
+    -->
 
     <!-- VUE JS -->
     <script src="js/app.js"></script>

@@ -12,8 +12,9 @@ You can do a single order, just click on the header column, and if you want mult
 
 **Configuration :**
 
-Configuration are split into 4 sections : "options", "labels", "css" and "columns".
+Configuration are split into 5 sections : "options", "labels", "css" , "columns" and "buttons".
 
+```
 - Options:
     - "recordsPerPage" => Number of records visibles per page.
     - "perPageOptions" => Values put in the selectbox per page.
@@ -45,6 +46,9 @@ Configuration are split into 4 sections : "options", "labels", "css" and "column
         - "css" => Dedicate css.
         - "value" =>
         - "minLength" => min char for searching ( input only )
+- Buttons
+    - Struct "Action", "Label", "Css" , "Mode".
+```
 
 **Dependecies :**
 
@@ -61,7 +65,54 @@ For the demo example we use also "momentjs" and "accouting.js" for the formating
 - Documentation.
 - Icons for First, Prev, Next, Last in place of label ( in fact label should be empty )
 
-**versions :**
+**Versions :**
+
+1.5 ( Du Hast - Rammstein )
+
+- Code refactoring.
+- Implementation of configurable buttons. That can emit Event to parent.
+
+Component call:
+```
+<data-greed ref="main-data-greed" v-bind:config="dataGreedConfig" v-on:callback="getBtnCall"></data-greed>
+```
+
+getBtnCall should recieve two arguments. "Action" (edit), "Data": the clicked row.
+
+```
+    methods:
+    {
+        getBtnCall: function(a,d)
+        {
+            console.log("CALL FROM CHILD TO PARENT.");
+            console.log(arguments);
+        }
+    }
+```
+
+In model config. Two way for "Mode":
+- "mode" with value "Emit" to send event to parent.
+- "mode" with function call the defined code.
+
+```
+    buttons: [
+    {
+        "action": "edit_",
+        "label": "edit",
+        "css": "btn-primary",
+        "mode": "emit"
+    },
+    {
+        "action": "remove_",
+        "label": "remove",
+        "css": "btn-danger",
+        "mode": function(d)
+        {
+            console.log("INTERNAL FUNCTION CALL [DATA]");
+            console.log(d);
+        }
+    }]
+```
 
 1.4 ( DMT - Do Ma Thang - 3YE )
 

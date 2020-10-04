@@ -37,6 +37,8 @@ var templateDataGreed = `
 
                     </template>
 
+                    <th v-if="config.buttons.length!==0">&#160;</th>
+
                 </tr>
                 <!-- /HEADER -->
 
@@ -49,9 +51,12 @@ var templateDataGreed = `
                             :class="[ config.columns[index].orderVisibility ? 'order' : '' , config.columns[index].orderMode ]" 
                             v-on:click="this._setOrder($event,index)" 
                             v-if="config.columns[index].visibility" v-html="d.name">
-                        </th>
+                        </th>                        
                         
                     </template>
+
+                    <th v-if="config.buttons.length!==0">&#160;</th>
+
                 </tr>
                 <!-- /COLUMNS NAME -->
 
@@ -80,9 +85,11 @@ var templateDataGreed = `
 
                             </template>
 
-                        </th>
+                        </th>                        
 
                     </template>
+
+                    <th v-if="config.buttons.length!==0">&#160;</th>
 
                 </tr>
                 <!-- /SEARCH ON COLUMNS -->
@@ -107,12 +114,21 @@ var templateDataGreed = `
 
                     </template>
 
+                    <td v-if="config.buttons.length!==0">
+
+                        <template v-for="(e,index) in config.buttons">
+                            <button type="button" class="btn btn-sm mr-1" :class="e.css" v-on:click="this._buttons(e,d);" v-html="config.labels.buttons[e.label]"></button>
+                        </template>
+
+                    </td>
+
                 </tr>
                 <!-- /RECORDS -->
 
                 <!-- NO RECORDS -->
                 <tr v-if="records.length===0">
                     <td class="text-center" :colspan="this.config.columns.filter( function(o) { if (o.visibility===true) return o;} ).length" v-html="config.labels.noRecordsFound"></td>
+                    <td v-if="config.buttons.length!==0">JJ</td>
                 </tr>
                 <!-- /NO RECORDS -->
 
@@ -124,6 +140,8 @@ var templateDataGreed = `
                             <td v-if="config.columns[n-1].visibility">&#160;</td>
                         </template>
 
+                        <td v-if="config.buttons.length!==0">YY</td>
+
                     </tr>
 
                 </template>
@@ -134,7 +152,7 @@ var templateDataGreed = `
 
     </div>
 
-    <nav aria-label="Page navigation example" class="dataGreedPagination" v-if="records.length!==0">
+    <nav aria-label="Page navigation" class="dataGreedPagination" v-if="records.length!==0">
 
         <span class="jump_page" v-if="this.config.options.jumpPage">
             <span v-html="config.labels.page"></span>
@@ -163,6 +181,9 @@ var templateDataGreed = `
 
     </nav>
 
+    <template v-if="false">
     <hr/>
-    {{searchMode}}
+    <button v-on:click="this.$emit('callback' , { 'a' : '421' , 'b' : '666' } )">TEST</button>
+    <hr/>
+    </template>
 `;

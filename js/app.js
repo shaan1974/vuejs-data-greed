@@ -48,7 +48,12 @@ var DataGreed = {
                         "Group #1",
                         "Group #2"
                     ],
-                    "page": "Page:"
+                    "page": "Page:",
+                    "buttons":
+                    {
+                        "edit": "E",
+                        "remove": "R"
+                    }
                 },
                 "css":
                 {
@@ -184,6 +189,24 @@ var DataGreed = {
                         "css": "mw75px pl-1 pr-0",
                         "value": ""
                     }
+                }],
+                "buttons": [
+                {
+                    "action": "edit_",
+                    "label": "edit",
+                    "css": "btn-primary",
+                    "mode": "emit"
+                },
+                {
+                    "action": "remove_",
+                    "label": "remove",
+                    "css": "btn-danger",
+                    "mode": function(d)
+                    {
+                        console.log("*********************************");
+                        console.log("INTERNAL FUNCTION CALL [DATA]");
+                        console.log(d);
+                    }
                 }]
             }
         };
@@ -192,9 +215,20 @@ var DataGreed = {
     {},
     watch:
     {},
-    mounted: function() {},
+    mounted: function()
+    {
+        // console.log(this);
+        // this.$refs["main-data-greed"].globalSearch="12"
+    },
     methods:
-    {}
+    {
+        getBtnCall: function(a, d)
+        {
+            console.log("*********************************");
+            console.log("CALL FROM CHILD TO PARENT.");
+            console.log(arguments);
+        }
+    }
 };
 
 App = Vue.createApp(DataGreed);

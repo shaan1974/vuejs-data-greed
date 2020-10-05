@@ -403,3 +403,29 @@
 .dataGreed th[colspan='0'] {
     display: none;
 }
+
+
+/* -- */
+
+.dataGreed .btn-container {
+    position: absolute;
+    right: -45px;
+}
+
+.dataGreed .btns-cell {
+    width: 1px;
+    font-size: 1px;
+    padding: 0px!important;
+    background-color: #dee2e6;
+}
+
+@media screen and (max-width: 600px) {
+    .dataGreed .btn-container {
+        position: relative;
+        right: 0px;
+    }
+    .dataGreed .btns-cell {
+        width: 100%;
+        font-size: auto;
+    }
+}

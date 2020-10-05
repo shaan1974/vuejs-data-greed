@@ -50,18 +50,18 @@
 
     <!-- DATA-GREED -->
 
+    <!--
     <script src="build/data-greed.js"></script>    
+    -->
 
     <!--
     <link rel="stylesheet" href="css/datagreed.css">
     <script src="build/data-greed-no-css.js"></script>
     -->
 
-    <!--
     <link rel="stylesheet" href="css/datagreed.css">
     <script src="js/data-greed/template.js"></script>
     <script src="js/data-greed/component.js"></script>
-    -->
 
     <!-- VUE JS -->
     <script src="js/app.js"></script>

@@ -76,32 +76,10 @@ function initDataGreedComponent(vapp)
                 //
                 this._loadData();
 
-                //  BUIKD FILTERS
+                //  BUILD FILTERS
                 //
                 this._searchFilter();
-
-                // console.log(this);
             },
-            /*watch:
-            {
-                ["columnnSearch"]: function(cVal, oVal)
-                {
-                    console.log("C CHANGE");
-
-                    if (typeof cVal === "string" && typeof oVal === "object")
-                    {
-                        // init
-                        console.log("INIT");
-                    }
-                    else if (typeof cVal === "string" && typeof oVal === "string")
-                    {
-                        console.log("SEARCH");
-                        console.log("CURRENT " + cVal);
-                        console.log("OLD : " + oVal);
-
-                    }
-                }
-            },*/
             computed:
             {
                 "dataFrom": function()
@@ -156,10 +134,6 @@ function initDataGreedComponent(vapp)
             },
             methods:
             {
-                /*_none: function()
-                {
-                    console.log("NONE");
-                },*/
                 /*
                     RESET SEARCH
                 */
@@ -168,6 +142,7 @@ function initDataGreedComponent(vapp)
                     this.previousSearch = "";
                     this.globalSearch = "";
 
+                    /*
                     for (var i = 0; i < this.config.columns.length; i++)
                     {
                         if (typeof this.config.columns[i].search !== "undefined")
@@ -177,6 +152,27 @@ function initDataGreedComponent(vapp)
 
                         this.columnnSearch[i] = "";
                     }
+                    */
+
+                    /*
+                    var loop = function(t, item)
+                    {
+                        if (typeof item.search !== "undefined")
+                        {
+                            item.search.value = "";
+                        }
+                        t.columnnSearch[i] = "";
+                    };
+                    
+                    var that = this;
+                    this.config.columns.forEach(loop.bind(null, that));
+                    */
+
+                    this._resetFilter("COLUMNS");
+                    this.columnnSearch = this.columnnSearch.map(function()
+                    {
+                        return "";
+                    });
 
                     this.$nextTick(() =>
                     {
@@ -191,8 +187,6 @@ function initDataGreedComponent(vapp)
                 {
                     if (m === "COLUMNS")
                     {
-                        // console.log("reset columns filters");
-
                         for (var i = 0; i < this.config.columns.length; i++)
                         {
                             if (typeof this.config.columns[i].search !== "undefined")
@@ -220,13 +214,9 @@ function initDataGreedComponent(vapp)
                         if (typeof e === "object")
                         {
                             this.lastFocusField = e.target;
-
-                            // console.log("inputType : " + e.inputType);
                             keyMode = e.inputType;
                         }
                     }
-
-                    // deleteContentBackward
 
                     var filterSearch = [];
                     var update = false;
@@ -260,13 +250,6 @@ function initDataGreedComponent(vapp)
                                         filterSearch[filterSearch.length - 1] = "";
                                         update = true;
                                     }
-                                    /*
-                                    if (this.config.columns[i].search.value !== "")
-                                    {
-                                        filterSearch[filterSearch.length - 1] = this.config.columns[i].search.value;
-                                        update = true;
-                                    }
-                                    */
                                 }
                             }
 
@@ -289,11 +272,6 @@ function initDataGreedComponent(vapp)
                         }
                     }
 
-                    // console.log(filterSearch);
-                    // console.log(update);
-                    // console.log(JSON.stringify(filterSearch));
-
-                    // this.columnnSearch = JSON.stringify(filterSearch);
                     this.columnnSearch = filterSearch;
 
                     if (update === true)
@@ -323,7 +301,6 @@ function initDataGreedComponent(vapp)
                     if (this.globalSearch !== "")
                     {
                         searchParm = this.globalSearch;
-                        // this.searchMode = "GLOBAL";
                         __searchMode = "GLOBAL";
                     }
                     else if (this.columnnSearch.filter(function(o)
@@ -332,7 +309,6 @@ function initDataGreedComponent(vapp)
                         }).length !== 0)
                     {
                         searchParm = JSON.stringify(this.columnnSearch);
-                        // this.searchMode = "MULTI";
                         __searchMode = "MULTI";
                     }
 
@@ -347,7 +323,6 @@ function initDataGreedComponent(vapp)
                                 per_page: this.config_recordsPerPage,
                                 order: JSON.stringify(this.order),
                                 search: searchParm,
-                                /*search_mode: this.searchMode*/
                                 search_mode: __searchMode
                             },
                             url: this.config.options.dataSourceUrl,
@@ -364,7 +339,6 @@ function initDataGreedComponent(vapp)
                     //
                     document.activeElement.blur();
 
-                    // console.log(response.data);
                     /*
                     this.records = response.data.records;
                     this.totalPages = response.data.totalPages;
@@ -374,8 +348,6 @@ function initDataGreedComponent(vapp)
                     Object.assign(this, response.data);
 
                     this._buildPager();
-
-                    // var that = this;
 
                     //  REMOVE LOADER
                     //
@@ -391,28 +363,20 @@ function initDataGreedComponent(vapp)
                             this.lastFocusField = "";
                         }
                     });
-                    /*      
-                    setTimeout(
-                        function(t)
-                        {
-                            that.loading = false;
-
-                            //  IF LAST FOCUS ELEMENT FOCUS IS DEFINED WE SET THE FOCUS BACK AGAIN
-                            //
-                            if (that.lastFocusField !== "")
-                            {
-                                that.lastFocusField.focus();
-                                that.lastFocusField = "";
-                            }
-                        }, 101, that
-                    );
-                    */
                 },
                 /*
                     DEFER NAVIGATION
                 */
                 _deferNavigate: function(e, page)
                 {
+                    e.target.previousElementSibling.value = "";
+
+                    var event = document.createEvent("Event");
+                    event.initEvent("input", false, true);
+                    event.inputType = "deleteContentBackward";
+                    e.target.previousElementSibling.dispatchEvent(event);
+
+                    /*
                     this.records = [];
                     this.previousSearch = "";
                     this._searchFilter();
@@ -424,6 +388,7 @@ function initDataGreedComponent(vapp)
                             that._navigate(page);
                         }, 501, that
                     );
+                    */
                 },
                 /*
                     NAVIGATE, CLICK ON PAGER
@@ -438,17 +403,14 @@ function initDataGreedComponent(vapp)
                 */
                 _buildPush: function(o, a, b, c, ac)
                 {
-                    if (typeof ac === "undefined")
-                    {
-                        ac = "";
-                    }
                     o.push(
                     {
                         "lbl": "" + a + "",
                         "v": "" + b + "",
                         "active": c,
-                        "aclass": ac
+                        "aclass": (typeof ac === "undefined") ? "" : ac
                     });
+
                     return o;
                 },
                 /*
@@ -460,7 +422,8 @@ function initDataGreedComponent(vapp)
                     var current_page = parseInt(this.pageno);
                     var total_pages = parseInt(this.totalPages);
 
-                    if (total_pages > 0 && total_pages != 1 && current_page <= total_pages)
+                    // if (total_pages > 0 && total_pages != 1 && current_page <= total_pages)
+                    if (total_pages !== 0)
                     {
                         right_links = current_page + 3;
                         previous = current_page - 1;
@@ -473,15 +436,18 @@ function initDataGreedComponent(vapp)
 
                             if (current_page > 3)
                             {
-                                pagination = this._buildPush(pagination, "" + this.config.labels.first + "", "1", false, "p-first");
-                                pagination = this._buildPush(pagination, "" + this.config.labels.previous + "", "" + previous_link + "", false, "p-prev");
+                                // pagination = this._buildPush(pagination, "" + this.config.labels.first + "", "1", false, "p-first");
+                                pagination = this._buildPush(pagination, this.config.labels.first, 1, false, "p-first " + this.config.css.pager.first);
+                                // pagination = this._buildPush(pagination, "" + this.config.labels.previous + "", "" + previous_link + "", false, "p-prev");
+                                pagination = this._buildPush(pagination, this.config.labels.previous, previous_link, false, "p-prev " + this.config.css.pager.prev);
                             }
 
                             for (i = (current_page - 2); i < current_page; i++)
                             {
                                 if (i > 0)
                                 {
-                                    pagination = this._buildPush(pagination, "" + i + "", "" + i + "", (i === current_page) ? true : false);
+                                    // pagination = this._buildPush(pagination, "" + i + "", "" + i + "", (i === current_page) ? true : false);
+                                    pagination = this._buildPush(pagination, i, i, (i === current_page) ? true : false);
                                 }
                             }
                             first_link = false;
@@ -489,22 +455,26 @@ function initDataGreedComponent(vapp)
 
                         if (first_link)
                         {
-                            pagination = this._buildPush(pagination, "" + current_page + "", "" + current_page + "", true);
+                            // pagination = this._buildPush(pagination, "" + current_page + "", "" + current_page + "", true);
+                            pagination = this._buildPush(pagination, current_page, current_page, true);
                         }
                         else if (current_page == total_pages)
                         {
-                            pagination = this._buildPush(pagination, "" + current_page + "", "" + current_page + "", true);
+                            // pagination = this._buildPush(pagination, "" + current_page + "", "" + current_page + "", true);
+                            pagination = this._buildPush(pagination, current_page, current_page, true);
                         }
                         else
                         {
-                            pagination = this._buildPush(pagination, "" + current_page + "", "" + current_page + "", (parseInt(pagination[pagination.length - 1].v) + 1 === current_page ? true : false));
+                            // pagination = this._buildPush(pagination, "" + current_page + "", "" + current_page + "", (parseInt(pagination[pagination.length - 1].v) + 1 === current_page ? true : false));
+                            pagination = this._buildPush(pagination, current_page, current_page, (parseInt(pagination[pagination.length - 1].v) + 1 === current_page ? true : false));
                         }
 
                         for (i = current_page + 1; i < right_links; i++)
                         {
                             if (i <= total_pages)
                             {
-                                pagination = this._buildPush(pagination, "" + i + "", "" + i + "", false);
+                                // pagination = this._buildPush(pagination, "" + i + "", "" + i + "", false);
+                                pagination = this._buildPush(pagination, i, i, false);
                             }
                         }
 
@@ -514,17 +484,18 @@ function initDataGreedComponent(vapp)
                         {
                             next_link = (i > total_pages) ? total_pages : i;
 
-                            pagination = this._buildPush(pagination, this.config.labels.next, (current_page + 1), false, "p-next");
-                            pagination = this._buildPush(pagination, this.config.labels.last, total_pages, false, "p-last");
+                            pagination = this._buildPush(pagination, this.config.labels.next, (current_page + 1), false, "p-next " + this.config.css.pager.next);
+                            pagination = this._buildPush(pagination, this.config.labels.last, total_pages, false, "p-last " + this.config.css.pager.last);
                         }
 
-                        this.pagination = pagination;
+                        // this.pagination = pagination;
                     }
-                    else
+                    /*else
                     {
-                        // console.log("HERE BUILD PAGER");
                         this.pagination = [];
-                    }
+                    }*/
+
+                    this.pagination = pagination;
                 },
                 /*
                     WHEN PER PAGE IS CHANGE WITH DROPDOWN
@@ -571,23 +542,6 @@ function initDataGreedComponent(vapp)
                             this._resetOrderMode();
                             cElm.orderMode = 'desc';
                         }
-                        /*
-                        if (cElm.orderVisibility === true && cElm.orderMode === "")
-                        {
-                            this._resetOrderMode();
-                            cElm.orderMode = 'asc';
-                        }
-                        else if (cElm.orderVisibility === true && cElm.orderMode === "asc")
-                        {
-                            this._resetOrderMode();
-                            cElm.orderMode = 'desc';
-                        }
-                        else if (cElm.orderVisibility === true && cElm.orderMode === "desc")
-                        {
-                            this._resetOrderMode();
-                            cElm.orderMode = 'asc';
-                        }
-                        */
 
                         this.order = [];
                         this.order.push(
@@ -600,7 +554,7 @@ function initDataGreedComponent(vapp)
                     {
                         //  IF NO ORDER HAS BEEN DEFINED YET
                         //
-                        if ( /*cElm.orderVisibility === true &&*/ cElm.orderMode === "")
+                        if (cElm.orderMode === "")
                         {
                             cElm.orderMode = 'asc';
 
@@ -612,7 +566,7 @@ function initDataGreedComponent(vapp)
                         }
                         //  IF ORDER EXIST WE HAVE TO CHANGE IT IN EXISTING ARRAY
                         //
-                        else if ( /*cElm.orderVisibility === true &&*/ (cElm.orderMode === "asc" || cElm.orderMode === "desc"))
+                        else if ((cElm.orderMode === "asc" || cElm.orderMode === "desc"))
                         {
                             cElm.orderMode = (cElm.orderMode === "asc") ? "desc" : "asc";
 
@@ -624,41 +578,6 @@ function initDataGreedComponent(vapp)
                                 }
                             }
                         }
-                        /*
-                        updateOrder = true;
-                        if (cElm.orderVisibility === true && cElm.orderMode === "")
-                        {
-                            cElm.orderMode = 'asc';
-                            updateOrder = false;
-                        }
-                        else if (cElm.orderVisibility === true && cElm.orderMode === "asc")
-                        {
-                            cElm.orderMode = 'desc';
-                        }
-                        else if (cElm.orderVisibility === true && cElm.orderMode === "desc")
-                        {
-                            cElm.orderMode = 'asc';
-                        }
-
-                        if (updateOrder === false)
-                        {
-                            this.order.push(
-                            {
-                                "p": ndx,
-                                "o": cElm.orderMode
-                            });
-                        }
-                        else
-                        {
-                            for (i = 0; i < this.order.length; i++)
-                            {
-                                if (this.order[i].p === ndx)
-                                {
-                                    this.order[i].o = (this.order[i].o === "asc") ? "desc" : "asc";
-                                }
-                            }
-                        }
-                        */
                     }
 
                     this._loadData();
@@ -666,9 +585,6 @@ function initDataGreedComponent(vapp)
                 _highlight: function(v, ndx)
                 {
                     if (this.searchMode === "") return v;
-                    // console.log("ndx [" + ndx + "] " + v);
-                    // return "_<b>zz</b>" + v + "_";
-                    // return v;
 
                     if (typeof this.config.columns[ndx].search === "undefined")
                     {
@@ -717,7 +633,7 @@ function initDataGreedComponent(vapp)
                 /*
                     IF BUTTONS ARE DEFINED ACTIONS ARE TREATHED HERE
                 */
-                _buttons: function(b, d)
+                _buttons: function(b, d, ndx)
                 {
                     //  REMOVE BLUR ON BUTTON
                     //
@@ -731,11 +647,11 @@ function initDataGreedComponent(vapp)
                     //
                     if (typeof b.mode === "function")
                     {
-                        b.mode(d);
+                        b.mode(d, ndx);
                     }
                     else
                     {
-                        this.$emit(this.$options.emits[0], b.action, d);
+                        this.$emit(this.$options.emits[0], b.action, d, ndx);
                     }
                 }
             }

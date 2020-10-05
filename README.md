@@ -29,12 +29,13 @@ Configuration are split into 5 sections : "options", "labels", "css" , "columns"
     - "visualFilterForOrderedColumns" => Show different color for ordered columns
     - "jumpPage" => Jump to page selectbox visible or not.
     - 'entriesInfo' => Entries infos visible or not.
+    - 'outSideButtons' => if action buttons should be inside cell or outside
 - Labels ( i expect you know what it's related )
 - Css
     - "Table"
     - "Pager position"
 - Columns
-    - "name" => Label.
+    - "name" => reference.
     - "fctTransform" => To be able to do transformation on colums.
     - "class" => Defined class.
     - "visibility" => or not
@@ -51,6 +52,8 @@ Configuration are split into 5 sections : "options", "labels", "css" , "columns"
     - Struct "Action", "Label", "Css" , "Mode".
 ```
 
+For button action take a look into the debug console.
+
 **Dependecies :**
 
 Right now no dependencies except : Boostrap 4 (for the look and fell) ,Axios.
@@ -66,6 +69,15 @@ For the demo example we use also "momentjs" and "accouting.js" for the formating
 - Documentation ( more detail ).
 
 **Versions :**
+
+1.7 ( Jack to the sound of the underground - Hit House )
+
+- Code refactoring.
+- Change defer part when filter is reset with cross button.
+- Buttons return also index position of element into the table.
+- Introduce custom css class in config for pager "Next", "Prev", "Fist" and "Last".
+- Centralize all labels into labels section, like for columns names.
+- Jsfiddle updated.
 
 1.6 ( Rebel Yell - Billy Idol )
 

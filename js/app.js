@@ -22,7 +22,8 @@ var DataGreed = {
                     "header": [3, 5],
                     "visualFilterForOrderedColumns": true,
                     "jumpPage": true,
-                    'entriesInfo': true
+                    'entriesInfo': true,
+                    "outSideButtons": true
                 },
                 "labels":
                 {
@@ -54,12 +55,22 @@ var DataGreed = {
                         "edit": "E",
                         "remove": "R"
                     },
-                    "visibility": "Visibility"
+                    "visibility": "Visibility",
+                    "columns": [
+                        "A..", "B..", "C..", "D..", "E..", "F..", "G.."
+                    ]
                 },
                 "css":
                 {
                     "table": "table-striped table-bordered",
-                    "pagerPosition": "float-right"
+                    "pagerPosition": "float-right",
+                    "pager":
+                    {
+                        "first": "",
+                        "prev": "",
+                        "next": "",
+                        "last": ""
+                    }
                 },
                 "columns": [
                 {
@@ -210,11 +221,12 @@ var DataGreed = {
                     "action": "remove_",
                     "label": "remove",
                     "css": "btn-danger",
-                    "mode": function(d)
+                    "mode": function(d, ndx)
                     {
                         console.log("*********************************");
                         console.log("INTERNAL FUNCTION CALL [DATA]");
                         console.log(d);
+                        console.log(ndx);
                     }
                 }]
             }
@@ -231,7 +243,7 @@ var DataGreed = {
     },
     methods:
     {
-        getBtnCall: function(a, d)
+        getBtnCall: function(a, d, ndx)
         {
             console.log("*********************************");
             console.log("CALL FROM CHILD TO PARENT.");

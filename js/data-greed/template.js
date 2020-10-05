@@ -40,7 +40,6 @@ var templateDataGreed = `
                         </div>
                     </div>                
                 </div>
-
                 <!-- /COLUMNS VISIBILITY -->
 
             </form>
@@ -60,7 +59,7 @@ var templateDataGreed = `
 
                     </template>
 
-                    <th v-if="config.buttons.length!==0">&#160;</th>
+                    <th v-if="config.buttons.length!==0" :class="config.options.outSideButtons ? 'btns-cell': ''">&#160;</th>
 
                 </tr>
                 <!-- /HEADER -->
@@ -73,12 +72,12 @@ var templateDataGreed = `
                             class="position-relative pl-3" 
                             :class="[ config.columns[index].orderVisibility ? 'order' : '' , config.columns[index].orderMode ]" 
                             v-on:click="this._setOrder($event,index)" 
-                            v-if="config.columns[index].visibility" v-html="d.name">
+                            v-if="config.columns[index].visibility" xv-html="d.name" v-html="config.labels.columns[index]">
                         </th>                        
                         
                     </template>
 
-                    <th v-if="config.buttons.length!==0">&#160;</th>
+                    <th v-if="config.buttons.length!==0" :class="config.options.outSideButtons ? 'btns-cell': ''">&#160;</th>
 
                 </tr>
                 <!-- /COLUMNS NAME -->
@@ -112,7 +111,7 @@ var templateDataGreed = `
 
                     </template>
 
-                    <th v-if="config.buttons.length!==0">&#160;</th>
+                    <th v-if="config.buttons.length!==0" :class="config.options.outSideButtons ? 'btns-cell': ''">&#160;</th>
 
                 </tr>
                 <!-- /SEARCH ON COLUMNS -->
@@ -137,11 +136,13 @@ var templateDataGreed = `
 
                     </template>
 
-                    <td v-if="config.buttons.length!==0">
+                    <td v-if="config.buttons.length!==0" :class="config.options.outSideButtons ? 'btns-cell': ''">
 
-                        <template v-for="(e,index) in config.buttons">
-                            <button type="button" class="btn btn-sm mr-1" :class="e.css" v-on:click="this._buttons(e,d);" v-html="config.labels.buttons[e.label]"></button>
-                        </template>
+                        <div :class="config.options.outSideButtons ? 'btn-container': ''">
+                            <template v-for="(e,index) in config.buttons">
+                                <button type="button" class="btn btn-sm mr-1" :class="e.css" v-on:click="this._buttons(e,d,main_index);" v-html="config.labels.buttons[e.label]"></button>
+                            </template>
+                        </div>
 
                     </td>
 
@@ -151,7 +152,7 @@ var templateDataGreed = `
                 <!-- NO RECORDS -->
                 <tr v-if="records.length===0">
                     <td class="text-center" :colspan="this.config.columns.filter( function(o) { if (o.visibility===true) return o;} ).length" v-html="config.labels.noRecordsFound"></td>
-                    <td v-if="config.buttons.length!==0">JJ</td>
+                    <td v-if="config.buttons.length!==0" :class="config.options.outSideButtons ? 'btns-cell': ''">&#160;</td>
                 </tr>
                 <!-- /NO RECORDS -->
 
@@ -163,7 +164,7 @@ var templateDataGreed = `
                             <td v-if="config.columns[n-1].visibility">&#160;</td>
                         </template>
 
-                        <td v-if="config.buttons.length!==0">&#160;</td>
+                        <td v-if="config.buttons.length!==0" :class="config.options.outSideButtons ? 'btns-cell': ''">&#160;</td>
 
                     </tr>
 
@@ -209,4 +210,5 @@ var templateDataGreed = `
     <button v-on:click="this.$emit('callback' , { 'a' : '421' , 'b' : '666' } )">TEST</button>
     <hr/>
     </template>
+    
 `;

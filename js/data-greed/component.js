@@ -369,7 +369,7 @@ function initDataGreedComponent(vapp)
                     this.extra = this.records.map(function(o)
                     {
                         return false;
-                    })
+                    });
 
                     this._buildPager();
 

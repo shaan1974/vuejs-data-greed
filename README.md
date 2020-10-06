@@ -76,6 +76,9 @@ For the demo example we use also "momentjs" and "accouting.js" for the formating
 
 **Versions :**
 
+1.8a 
+- Quick fix.
+
 1.8 ( Kame Ha Me Ha )
 
 - Css review.

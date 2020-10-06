@@ -28,8 +28,10 @@ Configuration are split into 5 sections : "options", "labels", "css" , "columns"
     - "header" => Definition for global header upper columns names
     - "visualFilterForOrderedColumns" => Show different color for ordered columns
     - "jumpPage" => Jump to page selectbox visible or not.
-    - 'entriesInfo' => Entries infos visible or not.
-    - 'outSideButtons' => if action buttons should be inside cell or outside
+    - "entriesInfo" => Entries infos visible or not.
+    - "outSideButtons" => if action buttons should be inside cell or outside
+    - "displayUnswitchColumnsAsExtraInfos" => If true columns with "visibility" eq "false" and "switchVisibility" eq "false" could be display into an extra block activated with a button.
+    - "highlight" : Hightlight or not found occurences.
 - Labels ( i expect you know what it's related )
 - Css
     - "Table"
@@ -67,8 +69,21 @@ For the demo example we use also "momentjs" and "accouting.js" for the formating
 - Save status ( page, order, ect...)
 - position option for ( Jump to page, per page, from/to - Total)
 - Documentation ( more detail ).
+- Languages support.
+- Pagination : Mode: "simple" (next,first,last,next) , "full" With numbers.
+- Dedicate column in the footer that do a sum of a numeric column
+- Add custom var during the ajax call.
 
 **Versions :**
+
+1.8 ( Kame Ha Me Ha )
+
+- Css review.
+- Create dedicate container for toolbar not any more into the table.
+- Move jump page to top toolbar.
+- Columns with "visibility" eq "false" and "switchVisibility" eq "false" could be display into an extra block activated with a button.
+    - Saw also hidden column that could be seen with switcher visibility in Extra if they are hidden.
+- Hightlight found occurences : true, false.
 
 1.7 ( Jack to the sound of the underground - Hit House )
 

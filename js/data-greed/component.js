@@ -46,7 +46,8 @@ function initDataGreedComponent(vapp)
                     "previousSearch": "",
                     "lastFocusField": "",
                     "searchMode": "",
-                    "btnColumnsVisibility": false
+                    "btnColumnsVisibility": false,
+                    "extra": []
                 };
             },
             emits: ['callback'],
@@ -130,6 +131,22 @@ function initDataGreedComponent(vapp)
                             return "";
                         }
                     });
+                },
+                "visibleColumsLen": function()
+                {
+                    return this.config.columns.filter(function(o)
+                    {
+                        if (o.visibility === true) return o;
+                    }).length;
+                },
+                "isUnswitchColumns": function()
+                {
+                    var l = this.config.columns.filter(function(o)
+                    {
+                        if (o.visibility === false && o.switchVisibility == false) return o;
+                    }).length;
+
+                    return (l === 0) ? false : true;
                 }
             },
             methods:
@@ -346,6 +363,13 @@ function initDataGreedComponent(vapp)
                     this.searchMode = response.data.searchMode;
                     */
                     Object.assign(this, response.data);
+
+                    //  BUILD FOR EXTRA
+                    //
+                    this.extra = this.records.map(function(o)
+                    {
+                        return false;
+                    })
 
                     this._buildPager();
 
@@ -587,6 +611,13 @@ function initDataGreedComponent(vapp)
                     if (this.searchMode === "") return v;
 
                     if (typeof this.config.columns[ndx].search === "undefined")
+                    {
+                        return v;
+                    }
+
+                    //  IF HIGHLIGHT SHOULD NOT BE DONE
+                    //
+                    if (this.config.options.highlight === false)
                     {
                         return v;
                     }

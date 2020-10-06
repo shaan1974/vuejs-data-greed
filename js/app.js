@@ -1,3 +1,4 @@
+// App._context.app._component.data()
 var App;
 
 var DataGreed = {
@@ -23,7 +24,9 @@ var DataGreed = {
                     "visualFilterForOrderedColumns": true,
                     "jumpPage": true,
                     'entriesInfo': true,
-                    "outSideButtons": true
+                    "outSideButtons": true,
+                    "displayUnswitchColumnsAsExtraInfos": true,
+                    "highlight": true
                 },
                 "labels":
                 {
@@ -57,12 +60,12 @@ var DataGreed = {
                     },
                     "visibility": "Visibility",
                     "columns": [
-                        "A..", "B..", "C..", "D..", "E..", "F..", "G.."
+                        "A..", "B..", "C..", "D..", "E..", "F..", "G..", "H.."
                     ]
                 },
                 "css":
                 {
-                    "table": "table-striped table-bordered",
+                    "table": "table-bordered",
                     "pagerPosition": "float-right",
                     "pager":
                     {

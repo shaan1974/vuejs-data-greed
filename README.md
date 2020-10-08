@@ -16,6 +16,7 @@ Configuration are split into 5 sections : "options", "labels", "css" , "columns"
 
 ```
 - Options:
+    - "customParameters" => Custom parameters than you can send to the ressources page that generate the Json.
     - "recordsPerPage" => Number of records visibles per page.
     - "perPageOptions" => Values put in the selectbox per page.
     - "dataSourceUrl" => Url to get data.
@@ -32,6 +33,7 @@ Configuration are split into 5 sections : "options", "labels", "css" , "columns"
     - "outSideButtons" => if action buttons should be inside cell or outside
     - "displayUnswitchColumnsAsExtraInfos" => If true columns with "visibility" eq "false" and "switchVisibility" eq "false" could be display into an extra block activated with a button.
     - "highlight" : Hightlight or not found occurences.
+    - "pagerNoNumber" : Indicate if pager should contain Number or just "First", "Prev", "Next" and "Last".
 - Labels ( i expect you know what it's related )
 - Css
     - "Table"
@@ -62,6 +64,21 @@ Right now no dependencies except : Boostrap 4 (for the look and fell) ,Axios.
 
 For the demo example we use also "momentjs" and "accouting.js" for the formating of data.
 
+**Warning :**
+
+If you use "displayUnswitchColumnsAsExtraInfos" feature avoid with boostrap 4 to use table-striped for "table" css in config.
+
+For "customParameters" i prove an example but fell free to create you own structure for that variable. I'v create one to be able to present you the functionnality but feel free to create you own data structure and update the ressource Php file to suit to your need.
+
+If custom parameters is not an empty array, in my example the ressource php file don't take care about global search or custom search by column.
+
+My example :
+```
+[ { 'c': 4, 'o': 'LT','v': '40'}]
+```
+
+Mean that in my php ressource file, if customvar is not empty so column 4 (E..) should be less that value "40".
+
 **To do:**
 
 - Templates for others css Framework like Material, Bulma... 
@@ -70,11 +87,16 @@ For the demo example we use also "momentjs" and "accouting.js" for the formating
 - position option for ( Jump to page, per page, from/to - Total)
 - Documentation ( more detail ).
 - Languages support.
-- Pagination : Mode: "simple" (next,first,last,next) , "full" With numbers.
 - Dedicate column in the footer that do a sum of a numeric column
-- Add custom var during the ajax call.
 
 **Versions :**
+
+1.9 ( Freestyler - Bomfunk MC's )
+
+- Css fixes.
+- Pagination : Mode: "simple" (next,first,last,next) , "full" With numbers.
+- Add custom var during the ajax call. With with functionnalities you can create you own filtering. An example is provided. With this functionnality you can create you own filtering data with a from and send all you request to the php page that generate the json.
+- Bug corrected with "Jump to Page" select box.
 
 1.8a 
 - Quick fix.

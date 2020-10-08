@@ -8,6 +8,7 @@ var DataGreed = {
             "lg": "fr",
             "dataGreedConfig":
             {
+                "customParameters": [],
                 "options":
                 {
                     "recordsPerPage": 10,
@@ -26,7 +27,8 @@ var DataGreed = {
                     'entriesInfo': true,
                     "outSideButtons": true,
                     "displayUnswitchColumnsAsExtraInfos": true,
-                    "highlight": true
+                    "highlight": true,
+                    "pagerNoNumber": true
                 },
                 "labels":
                 {
@@ -77,7 +79,7 @@ var DataGreed = {
                 },
                 "columns": [
                 {
-                    "name": "C #A",
+                    "name": "COLUMN_A",
                     "class": "",
                     "visibility": true,
                     "orderVisibility": true,
@@ -85,7 +87,7 @@ var DataGreed = {
                     "switchVisibility": true
                 },
                 {
-                    "name": "C #B",
+                    "name": "COLUMN_B",
                     "class": "",
                     "visibility": true,
                     "orderVisibility": true,
@@ -99,7 +101,7 @@ var DataGreed = {
                     "switchVisibility": true
                 },
                 {
-                    "name": "C #C",
+                    "name": "COLUMN_C",
                     "fctTransform": function(s, t)
                     {
                         return s + "66<u>é</u>6";
@@ -117,7 +119,7 @@ var DataGreed = {
                     "switchVisibility": true
                 },
                 {
-                    "name": "C #D",
+                    "name": "COLUMN_D",
                     "fctTransform": function(s, t)
                     {
                         return moment("" + s + "", "YYYY-MM-DD").format("DD-MM-YYYY");
@@ -135,7 +137,7 @@ var DataGreed = {
                     "switchVisibility": true
                 },
                 {
-                    "name": "C #E",
+                    "name": "COLUMN_E",
                     "fctTransform": function(s, t)
                     {
                         var a = moment("" + t[3] + "", "YYYY-MM-DD");
@@ -152,12 +154,12 @@ var DataGreed = {
                     {
                         "type": "input",
                         "value": "",
-                        "minLength": 3
+                        "minLength": 1
                     },
                     "switchVisibility": true
                 },
                 {
-                    "name": "C #F",
+                    "name": "COLUMN_F",
                     "class": "",
                     "visibility": true,
                     "orderVisibility": true,
@@ -171,7 +173,7 @@ var DataGreed = {
                     "switchVisibility": true
                 },
                 {
-                    "name": "C #G",
+                    "name": "COLUMN_G",
                     "fctTransform": function(s, t)
                     {
                         var options = {
@@ -191,7 +193,7 @@ var DataGreed = {
                     "switchVisibility": true
                 },
                 {
-                    "name": "C #H",
+                    "name": "COLUMN_H",
                     "class": "",
                     "visibility": false,
                     "orderVisibility": false,
@@ -230,6 +232,7 @@ var DataGreed = {
                         console.log("INTERNAL FUNCTION CALL [DATA]");
                         console.log(d);
                         console.log(ndx);
+                        alert("I'm doing nothing except call a function defined into the model of the component data");
                     }
                 }]
             }
@@ -251,6 +254,7 @@ var DataGreed = {
             console.log("*********************************");
             console.log("CALL FROM CHILD TO PARENT.");
             console.log(arguments);
+            alert("I'm doing nothing but i'm calling a method inside the parent element");
         }
     }
 };

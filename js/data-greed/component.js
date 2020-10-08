@@ -61,7 +61,7 @@ function initDataGreedComponent(vapp)
 
                 //  BUILD ORDER
                 //
-                for (var i = 0; i < this.config.columns.length; i++)
+                /*for (var i = 0; i < this.config.columns.length; i++)
                 {
                     if (this.config.columns[i].orderMode !== "")
                     {
@@ -71,7 +71,24 @@ function initDataGreedComponent(vapp)
                             "o": this.config.columns[i].orderMode
                         });
                     }
-                }
+                }*/
+
+                var fct = function(filtered, o, i)
+                {
+                    if (o.orderMode !== "")
+                    {
+                        filtered.push(
+                        {
+                            "p": i,
+                            "o": o.orderMode
+                        });
+                    }
+
+                    return filtered;
+                };
+
+                this.order = this.config.columns.reduce(fct, []);
+                // console.log(JSON.stringify(this.order));
 
                 //  LOAD DATA FOR FIRST TIME
                 //
@@ -149,6 +166,14 @@ function initDataGreedComponent(vapp)
                     return (l === 0) ? false : true;
                 }
             },
+            watch:
+            {
+                ["config.customParameters"]: function()
+                {
+                    // console.log("customParameters change.");
+                    this._navigate(1);
+                }
+            },
             methods:
             {
                 /*
@@ -180,7 +205,7 @@ function initDataGreedComponent(vapp)
                         }
                         t.columnnSearch[i] = "";
                     };
-                    
+                        
                     var that = this;
                     this.config.columns.forEach(loop.bind(null, that));
                     */
@@ -329,6 +354,11 @@ function initDataGreedComponent(vapp)
                         __searchMode = "MULTI";
                     }
 
+                    //  CUSTOM PARAMETERS                    
+                    //
+                    var customParameters = JSON.stringify(this.config.customParameters);
+                    customParameters = (customParameters === "[]") ? "" : customParameters;
+
                     //  AJAX CALL
                     //
                     axios(
@@ -340,7 +370,8 @@ function initDataGreedComponent(vapp)
                                 per_page: this.config_recordsPerPage,
                                 order: JSON.stringify(this.order),
                                 search: searchParm,
-                                search_mode: __searchMode
+                                search_mode: __searchMode,
+                                customParameters: customParameters
                             },
                             url: this.config.options.dataSourceUrl,
                             responseType: 'stream',
@@ -427,12 +458,15 @@ function initDataGreedComponent(vapp)
                 */
                 _buildPush: function(o, a, b, c, ac)
                 {
+                    ac = (typeof ac === "undefined") ? "" : ac;
+
                     o.push(
                     {
                         "lbl": "" + a + "",
                         "v": "" + b + "",
                         "active": c,
-                        "aclass": (typeof ac === "undefined") ? "" : ac
+                        "aclass": ac,
+                        "isPage": ac.includes('p-page')
                     });
 
                     return o;
@@ -460,9 +494,7 @@ function initDataGreedComponent(vapp)
 
                             if (current_page > 3)
                             {
-                                // pagination = this._buildPush(pagination, "" + this.config.labels.first + "", "1", false, "p-first");
                                 pagination = this._buildPush(pagination, this.config.labels.first, 1, false, "p-first " + this.config.css.pager.first);
-                                // pagination = this._buildPush(pagination, "" + this.config.labels.previous + "", "" + previous_link + "", false, "p-prev");
                                 pagination = this._buildPush(pagination, this.config.labels.previous, previous_link, false, "p-prev " + this.config.css.pager.prev);
                             }
 
@@ -470,8 +502,7 @@ function initDataGreedComponent(vapp)
                             {
                                 if (i > 0)
                                 {
-                                    // pagination = this._buildPush(pagination, "" + i + "", "" + i + "", (i === current_page) ? true : false);
-                                    pagination = this._buildPush(pagination, i, i, (i === current_page) ? true : false);
+                                    pagination = this._buildPush(pagination, i, i, (i === current_page) ? true : false, 'p-page');
                                 }
                             }
                             first_link = false;
@@ -479,26 +510,22 @@ function initDataGreedComponent(vapp)
 
                         if (first_link)
                         {
-                            // pagination = this._buildPush(pagination, "" + current_page + "", "" + current_page + "", true);
-                            pagination = this._buildPush(pagination, current_page, current_page, true);
+                            pagination = this._buildPush(pagination, current_page, current_page, true, 'p-page');
                         }
                         else if (current_page == total_pages)
                         {
-                            // pagination = this._buildPush(pagination, "" + current_page + "", "" + current_page + "", true);
-                            pagination = this._buildPush(pagination, current_page, current_page, true);
+                            pagination = this._buildPush(pagination, current_page, current_page, true, 'p-page');
                         }
                         else
                         {
-                            // pagination = this._buildPush(pagination, "" + current_page + "", "" + current_page + "", (parseInt(pagination[pagination.length - 1].v) + 1 === current_page ? true : false));
-                            pagination = this._buildPush(pagination, current_page, current_page, (parseInt(pagination[pagination.length - 1].v) + 1 === current_page ? true : false));
+                            pagination = this._buildPush(pagination, current_page, current_page, (parseInt(pagination[pagination.length - 1].v) + 1 === current_page ? true : false), 'p-page');
                         }
 
                         for (i = current_page + 1; i < right_links; i++)
                         {
                             if (i <= total_pages)
                             {
-                                // pagination = this._buildPush(pagination, "" + i + "", "" + i + "", false);
-                                pagination = this._buildPush(pagination, i, i, false);
+                                pagination = this._buildPush(pagination, i, i, false, 'p-page');
                             }
                         }
 
@@ -511,13 +538,7 @@ function initDataGreedComponent(vapp)
                             pagination = this._buildPush(pagination, this.config.labels.next, (current_page + 1), false, "p-next " + this.config.css.pager.next);
                             pagination = this._buildPush(pagination, this.config.labels.last, total_pages, false, "p-last " + this.config.css.pager.last);
                         }
-
-                        // this.pagination = pagination;
                     }
-                    /*else
-                    {
-                        this.pagination = [];
-                    }*/
 
                     this.pagination = pagination;
                 },
@@ -526,7 +547,6 @@ function initDataGreedComponent(vapp)
                 */
                 _changePerPage: function(e)
                 {
-                    // this.config_recordsPerPage = parseInt(e.target.value);
                     this.config_recordsPerPage = e.target.value;
                     this._navigate(1);
                 },
@@ -556,12 +576,12 @@ function initDataGreedComponent(vapp)
 
                     if (e.shiftKey === false)
                     {
-                        if ( /*cElm.orderVisibility === true &&*/ (cElm.orderMode === "" || cElm.orderMode === "desc"))
+                        if ((cElm.orderMode === "" || cElm.orderMode === "desc"))
                         {
                             this._resetOrderMode();
                             cElm.orderMode = 'asc';
                         }
-                        else if ( /*cElm.orderVisibility === true &&*/ cElm.orderMode === "asc")
+                        else if (cElm.orderMode === "asc")
                         {
                             this._resetOrderMode();
                             cElm.orderMode = 'desc';

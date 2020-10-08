@@ -7,7 +7,7 @@
 
 .dataGreedPagination {
     color: #000;
-    background-color: #eaeaea;
+    background-color: #f2f2f2;
     font-size: 14px;
 }
 
@@ -24,32 +24,32 @@
 
 /* --- */
 
-.scrollTableVertical tbody {
+.dataGreed .scrollTableVertical tbody {
     display: block;
     max-height: 200px;
     overflow-y: auto;
 }
 
-.scrollTableVertical thead,
-.scrollTableVertical tbody tr {
+.dataGreed .scrollTableVertical thead,
+.dataGreed .scrollTableVertical tbody tr {
     display: table;
     width: 100%;
     table-layout: fixed;
 }
 
-.scrollTableVertical thead {
+.dataGreed .scrollTableVertical thead {
     width: calc( 100% - 1em)
 }
 
 
 /* -- */
 
-.horizontal-scrollable {
+.dataGreed .horizontal-scrollable {
     overflow-x: auto;
     white-space: nowrap;
 }
 
-.horizontal-scrollable>table {
+.dataGreed .horizontal-scrollable>table {
     float: none;
 }
 
@@ -208,6 +208,9 @@
     FOCUS
 */
 
+.dataGreedToolBar .form-control:focus,
+.dataGreedToolBar input[type='text']:focus,
+.dataGreedToolBar input[type='range']:focus,
 .dataGreed .form-control:focus,
 .dataGreed input[type='text']:focus,
 .dataGreed input[type='range']:focus {
@@ -218,6 +221,9 @@
     background-color: #F7F9FB;
 }
 
+.dataGreedToolBar .form-control:focus,
+.dataGreedToolBar input[type='text']:focus,
+.dataGreedToolBar input[type='range']:focus,
 .dataGreed .form-control:focus,
 .dataGreed input[type='text']:focus,
 .dataGreed input[type='range']:focus {
@@ -406,4 +412,11 @@
 .dataGreed .extraTd,
 .dataGreed .extraTd li {
     background-color: #e5f0fa;
+}
+
+
+/* -- */
+
+.dataGreed .emptyTr {
+    background-color: rgba(0, 0, 0, .02);
 }

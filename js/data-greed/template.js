@@ -2,7 +2,6 @@
 
 var templateDataGreed = `
 
-        
     <div class="dataGreedToolBar">
 
         <!-- TOP TOOLBAR -->
@@ -12,7 +11,7 @@ var templateDataGreed = `
             <div class="form-group p2 mr-2 jump_page" v-if="this.config.options.jumpPage">
                 <span class="form-control-sm mb-2" v-html="config.labels.page"></span>
                 <select class="form-control form-control-sm mb-2" v-on:change="this._navigate($event.target.value)">
-                    <option v-for="p in totalPages" :selected="p===parseInt(this.pageno)">{{p}}/{{totalPages}}</option>
+                    <option v-for="p in totalPages" :selected="p===parseInt(this.pageno)" :value="p">{{p}}/{{totalPages}}</option>
                 </select>
             </div>
             <!-- /JUMP TO PAGE -->
@@ -224,7 +223,7 @@ var templateDataGreed = `
 
                 <template v-if="parseInt(records.length)!=parseInt(this.config_recordsPerPage) && this.config.options.displayEmptyLines">
                 
-                    <tr v-for="n in ( parseInt(this.config_recordsPerPage)-this.records.length)">
+                    <tr v-for="n in ( parseInt(this.config_recordsPerPage)-this.records.length)" class="emptyTr">
 
                         <!-- FIRST COL IF EXTRA -->
                         <td v-if="config.options.displayUnswitchColumnsAsExtraInfos && visibleColumsLen!==0 && isUnswitchColumns"></td>
@@ -250,9 +249,15 @@ var templateDataGreed = `
 
         <!-- PAGER -->
         <ul class="pagination pagination-sm" :class="this.config.css.pagerPosition">        
-            <li v-for="p in pagination" class="page-item" :class="[ p.active ? 'active' : '' ]">
-                <a class="page-link" :class="p.aclass" href="" v-on:click.prevent="this._navigate(p.v)">{{p.lbl}}</a>
-            </li>
+        
+            <template v-for="p in pagination">
+            
+                <li class="page-item" :class="[ p.active ? 'active' : '' ]" v-if="p.isPage===false || (p.isPage===true && config.options.pagerNoNumber===true) ">
+                    <a class="page-link" :class="p.aclass" href="" v-on:click.prevent="this._navigate(p.v)">{{p.lbl}}</a>
+                </li>
+
+            </template>
+
         </ul>
         <!-- /PAGER -->
         
@@ -279,5 +284,5 @@ var templateDataGreed = `
     <button v-on:click="this.$emit('callback' , { 'a' : '421' , 'b' : '666' } )">TEST</button>
     <hr/>
     </template>
-
+    
 `;

@@ -34,20 +34,35 @@
 
     <div id="app">
 
-        <br/>
+        <div class="container mb-4 mt-4"> 
+            <div class="card">
+                <div class="card-body">  
+
+                    <button class="btn btn-sm btn-secondary" v-on:click="dataGreedConfig.customParameters=[ { 'c': 4, 'o': 'LT','v': '40'}]">Set Custom parameters #1 (Mean Age should be less than 40)</button>&#160;
+                    <button class="btn btn-sm btn-secondary" v-on:click="dataGreedConfig.customParameters=[]">Reset Custom parameters</button>
+                    {{dataGreedConfig.customParameters}}
+
+                </div>
+            </div>
+        </div>
+
         <div class="container"> 
             <div class="card">
                 <div class="card-body">  
                 
-                <template v-if="false">
-                <button v-on:click="this.$refs['main-data-greed'].globalSearch='12';">WX</button>
-                <hr/>
-                </template>
+                    <template v-if="false">
+                    <button v-on:click="this.$refs['main-data-greed'].globalSearch='12';">WX</button>
+                    <hr/>
+                    </template>
 
-                <data-greed ref="main-data-greed" v-bind:config="dataGreedConfig" v-on:callback="getBtnCall"></data-greed>               
+                    <data-greed ref="main-data-greed" v-bind:config="dataGreedConfig" v-on:callback="getBtnCall"></data-greed>               
+
                 </div>
             </div>
         </div>
+
+        <br/>
+        <br/>
 
     </div>
 

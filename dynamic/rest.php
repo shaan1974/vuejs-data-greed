@@ -1,4 +1,30 @@
 <?php
+    // Allow from any origin
+    if(isset($_SERVER["HTTP_ORIGIN"]))
+    {
+        // You can decide if the origin in $_SERVER['HTTP_ORIGIN'] is something you want to allow, or as we do here, just allow all
+        header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+    }
+    else
+    {
+        //No HTTP_ORIGIN set, so we allow any. You can disallow if needed here
+        header("Access-Control-Allow-Origin: *");
+    }
+
+    header("Access-Control-Allow-Credentials: true");
+    header("Access-Control-Max-Age: 600");    // cache for 10 minutes
+
+    if($_SERVER["REQUEST_METHOD"] == "OPTIONS")
+    {
+        if (isset($_SERVER["HTTP_ACCESS_CONTROL_REQUEST_METHOD"]))
+            header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT"); //Make sure you remove those you do not want to support
+
+        if (isset($_SERVER["HTTP_ACCESS_CONTROL_REQUEST_HEADERS"]))
+            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+        //Just exit with 200 OK with the above headers for OPTIONS method
+        exit(0);
+    }
 
 	//	OUTPUT
 	//	
@@ -10,7 +36,7 @@
     //
         $columns = (object) [
             "names" => array(   "id",       "fullname", "nickname", "birthdate",    "age",      "email",    "salary",   "gender"),
-            "types" => array(   "NONE",     "STRING",   "STRING",   "STRING",       "STRING",   "STRING",   "NUMBER",   "STRING"),
+            "types" => array(   "NONE",     "STRING",   "STRING",   "STRING",       "NUMBER",   "STRING",   "NUMBER",   "STRING"),
             "search" => array(  "NONE",     "LIKE",     "LIKE",     "LIKE",         "LIKE",     "LIKE",     "LIKE",     "EQ")
         ];  
 
@@ -44,48 +70,88 @@
 
     //  WHERE
     //
+        //  IF NO CUSTOM PARAMETERS HAS BEEN DEFINED
+        //
         $where="";
-        $jsonWhere = json_decode($_POST['search'],true);
-        
-        // if ( count($jsonWhere)===0)
-        if ( $_POST['search_mode']==="")
+
+        if (  $_POST['customParameters'] === "" )
         {
-            $where="";
-        }
-        // else if ( count($jsonWhere)===1)
-        else if ( $_POST['search_mode']==="GLOBAL")
-        {
-            $w = array();
-            $jsonWhere = $_POST['search'];
-            for($j=0;$j<count($columns->names);$j++)
+            $jsonWhere = json_decode($_POST['search'],true);
+            
+            if ( $_POST['search_mode']==="")
             {
-                if ( $columns->types[$j]!=="NONE")
-                {
-                    // array_push( $w , " ".$columns->names[$j]." like '%".$jsonWhere[0]."%'" );
-                    array_push( $w , " ".$columns->names[$j]." like '%".$jsonWhere."%'" );
-                }
+                $where="";
             }
-            $where=" WHERE ".implode(" OR " , $w). " ";
+            else if ( $_POST['search_mode']==="GLOBAL")
+            {
+                $w = array();
+                $jsonWhere = $_POST['search'];
+                for($j=0;$j<count($columns->names);$j++)
+                {
+                    if ( $columns->types[$j]!=="NONE")
+                    {
+                        array_push( $w , " ".$columns->names[$j]." like '%".$jsonWhere."%'" );
+                    }
+                }
+                $where=" WHERE ".implode(" OR " , $w). " ";
+            }
+            else if ( $_POST['search_mode']==="MULTI")
+            {
+                $w = array();
+                for($j=0;$j<count($columns->names);$j++)
+                {
+                    if ( $columns->types[$j]!=="NONE" && $jsonWhere[$j]!="" )
+                    {
+                        if ( $columns->search[$j]==="LIKE")
+                        {
+                            array_push( $w , " ".$columns->names[$j]." like '%".$jsonWhere[$j]."%'" );
+                        }
+                        else if ( $columns->search[$j]==="EQ")
+                        {
+                            array_push( $w , " ".$columns->names[$j]." = '".$jsonWhere[$j]."'" );
+                        }
+                    }
+                }
+                $where=" WHERE ".implode(" AND " , $w). " ";
+            }
         }
         else
-        {
+        {   
+            $jsonWhere = json_decode($_POST['customParameters'],true);
+            // print_r($jsonWhere);
+
             $w = array();
-            for($j=0;$j<count($columns->names);$j++)
+            for($i=0;$i<count($jsonWhere);$i++)
             {
-                if ( $columns->types[$j]!=="NONE" && $jsonWhere[$j]!="" )
+                
+                $cname = $columns->names[$jsonWhere[$i]["c"]];
+                $op="";
+                
+                switch( $jsonWhere[$i]["o"])
                 {
-                    if ( $columns->search[$j]==="LIKE")
-                    {
-                        array_push( $w , " ".$columns->names[$j]." like '%".$jsonWhere[$j]."%'" );
-                    }
-                    else if ( $columns->search[$j]==="EQ")
-                    {
-                        array_push( $w , " ".$columns->names[$j]." = '".$jsonWhere[$j]."'" );
-                    }
+                    case "LT" :
+                                    $op = "<";
+                                    break;
                 }
+                
+                $ctype = $columns->types[$jsonWhere[$i]["c"]];
+
+                $aq="";
+                if ( $ctype==="STRING")
+                {
+                    $aq="'";
+                }
+
+                $v = $jsonWhere[$i]["v"];
+                array_push( $w , "".$cname." ".$op." ".$aq."".$v."".$aq." " );
             }
+
+            // print_r($w);
             $where=" WHERE ".implode(" AND " , $w). " ";
+            // echo $where;
+            // die();
         }
+
 
     //  GET TOTAL ROWS - TOTAL PAGES
     //

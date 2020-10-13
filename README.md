@@ -70,26 +70,24 @@ If you use "displayUnswitchColumnsAsExtraInfos" feature avoid with boostrap 4 to
 
 For "customParameters" i prove an example but fell free to create you own structure for that variable. I'v create one to be able to present you the functionnality but feel free to create you own data structure and update the ressource Php file to suit to your need.
 
-If custom parameters is not an empty array, in my example the ressource php file don't take care about global search or custom search by column.
-
-My example :
-```
-[ { 'c': 4, 'o': 'LT','v': '40'}]
-```
-
-Mean that in my php ressource file, if customvar is not empty so column 4 (E..) should be less that value "40".
-
 **To do:**
 
 - Templates for others css Framework like Material, Bulma... 
-- Page on top option.
 - Save status ( page, order, ect...)
 - position option for ( Jump to page, per page, from/to - Total)
 - Documentation ( more detail ).
 - Languages support.
-- Dedicate column in the footer that do a sum of a numeric column
+- Dedicate column in the footer that do a sum of a numeric column.
+- With custom parameters - Add Highlight on found occurences.
 
 **Versions :**
+
+2.0 ( Battlestar Galactica 2003 )
+
+- Correct bug with label of columns names into visibility dropdown.
+- Additional component for filtering.
+- Rewrite way of building query. Same way for all call, Global, single or from Filter component.
+- Example and build javascript file not yet updated.
 
 1.9 ( Freestyler - Bomfunk MC's )
 

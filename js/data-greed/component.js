@@ -52,7 +52,7 @@ function initDataGreedComponent(vapp)
             },
             emits: ['callback'],
             props: ['config'],
-            template: '' + templateDataGreed + '',
+            template: '' + templateDataGreed.replace(/<!--.*?-->/gm, '') + '',
             mounted: function()
             {
                 //  SET TO DATA VAR
@@ -61,17 +61,6 @@ function initDataGreedComponent(vapp)
 
                 //  BUILD ORDER
                 //
-                /*for (var i = 0; i < this.config.columns.length; i++)
-                {
-                    if (this.config.columns[i].orderMode !== "")
-                    {
-                        this.order.push(
-                        {
-                            "p": i,
-                            "o": this.config.columns[i].orderMode
-                        });
-                    }
-                }*/
 
                 var fct = function(filtered, o, i)
                 {
@@ -88,7 +77,6 @@ function initDataGreedComponent(vapp)
                 };
 
                 this.order = this.config.columns.reduce(fct, []);
-                // console.log(JSON.stringify(this.order));
 
                 //  LOAD DATA FOR FIRST TIME
                 //
@@ -170,7 +158,6 @@ function initDataGreedComponent(vapp)
             {
                 ["config.customParameters"]: function()
                 {
-                    // console.log("customParameters change.");
                     this._navigate(1);
                 }
             },
@@ -183,32 +170,6 @@ function initDataGreedComponent(vapp)
                 {
                     this.previousSearch = "";
                     this.globalSearch = "";
-
-                    /*
-                    for (var i = 0; i < this.config.columns.length; i++)
-                    {
-                        if (typeof this.config.columns[i].search !== "undefined")
-                        {
-                            this.config.columns[i].search.value = "";
-                        }
-
-                        this.columnnSearch[i] = "";
-                    }
-                    */
-
-                    /*
-                    var loop = function(t, item)
-                    {
-                        if (typeof item.search !== "undefined")
-                        {
-                            item.search.value = "";
-                        }
-                        t.columnnSearch[i] = "";
-                    };
-                        
-                    var that = this;
-                    this.config.columns.forEach(loop.bind(null, that));
-                    */
 
                     this._resetFilter("COLUMNS");
                     this.columnnSearch = this.columnnSearch.map(function()
@@ -227,6 +188,8 @@ function initDataGreedComponent(vapp)
                 */
                 _resetFilter: function(m)
                 {
+                    this.config.customParameters = "";
+
                     if (m === "COLUMNS")
                     {
                         for (var i = 0; i < this.config.columns.length; i++)
@@ -337,6 +300,15 @@ function initDataGreedComponent(vapp)
                     this.searchMode = "";
                     var __searchMode = "";
 
+                    //  CUSTOM PARAMETERS                    
+                    //
+                    customParameters = this.config.customParameters;
+
+                    if (customParameters != "")
+                    {
+                        this.globalSearch = "";
+                    }
+
                     //  BUILD SEARCH PARAMETER
                     //                    
                     var searchParm = "";
@@ -353,11 +325,6 @@ function initDataGreedComponent(vapp)
                         searchParm = JSON.stringify(this.columnnSearch);
                         __searchMode = "MULTI";
                     }
-
-                    //  CUSTOM PARAMETERS                    
-                    //
-                    var customParameters = JSON.stringify(this.config.customParameters);
-                    customParameters = (customParameters === "[]") ? "" : customParameters;
 
                     //  AJAX CALL
                     //
@@ -387,12 +354,6 @@ function initDataGreedComponent(vapp)
                     //
                     document.activeElement.blur();
 
-                    /*
-                    this.records = response.data.records;
-                    this.totalPages = response.data.totalPages;
-                    this.totalRows = response.data.totalRows;
-                    this.searchMode = response.data.searchMode;
-                    */
                     Object.assign(this, response.data);
 
                     //  BUILD FOR EXTRA
@@ -430,20 +391,6 @@ function initDataGreedComponent(vapp)
                     event.initEvent("input", false, true);
                     event.inputType = "deleteContentBackward";
                     e.target.previousElementSibling.dispatchEvent(event);
-
-                    /*
-                    this.records = [];
-                    this.previousSearch = "";
-                    this._searchFilter();
-
-                    var that = this;
-                    setTimeout(
-                        function(t)
-                        {
-                            that._navigate(page);
-                        }, 501, that
-                    );
-                    */
                 },
                 /*
                     NAVIGATE, CLICK ON PAGER
@@ -480,7 +427,6 @@ function initDataGreedComponent(vapp)
                     var current_page = parseInt(this.pageno);
                     var total_pages = parseInt(this.totalPages);
 
-                    // if (total_pages > 0 && total_pages != 1 && current_page <= total_pages)
                     if (total_pages !== 0)
                     {
                         right_links = current_page + 3;
@@ -628,6 +574,15 @@ function initDataGreedComponent(vapp)
                 },
                 _highlight: function(v, ndx)
                 {
+                    if (this.searchMode === "" && this.config.customParameters != "")
+                    {
+                        /*console.log("*******************************");
+                        console.log(this.config.customParameters);
+                        console.log(v);
+                        console.log(ndx);
+                        */
+                    }
+
                     if (this.searchMode === "") return v;
 
                     if (typeof this.config.columns[ndx].search === "undefined")
@@ -680,6 +635,7 @@ function initDataGreedComponent(vapp)
 
                         return v;
                     }
+
                 },
                 /*
                     IF BUTTONS ARE DEFINED ACTIONS ARE TREATHED HERE

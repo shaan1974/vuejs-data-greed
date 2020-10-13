@@ -22,29 +22,30 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment.min.js" integrity="sha512-Izh34nqeeR7/nwthfeE0SI3c8uhFSnqxV0sI9TvTcXiFJkMd6fB644O64BRq2P/LA/+7eRvCw4GmLsXksyTHBg==" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@next"></script>
 
-    <style>
-        body
-        {
-            overflow-y:scroll;
-        }
-    </style>
+    <link rel="stylesheet" href="css/main.css">
+
 </head>
 
 <body>
 
     <div id="app">
 
+        <data-greed-filter ref="main-data-greed-filter" v-bind:config="dataGreedConfig" v-bind:filter="dataGreedFilter"></data-greed-filter>
+
         <div class="container mb-4 mt-4"> 
             <div class="card">
                 <div class="card-body">  
-
+                    <template>
                     <button class="btn btn-sm btn-secondary" v-on:click="dataGreedConfig.customParameters=[ { 'c': 4, 'o': 'LT','v': '40'}]">Set Custom parameters #1 (Mean Age should be less than 40)</button>&#160;
                     <button class="btn btn-sm btn-secondary" v-on:click="dataGreedConfig.customParameters=[]">Reset Custom parameters</button>
+                    </template>
                     {{dataGreedConfig.customParameters}}
-
+                    <hr class="mt-2 mb-2"/>
+                    <button class="btn btn-sm btn-secondary" v-on:click="this.dataGreedFilter.sidebarFilter=true;" class="cursor">&#9776; Open Custom filters</button>
                 </div>
             </div>
         </div>
+        <!-- /EXAMPLE SIDEBAR CUSTOM FILTER -->
 
         <div class="container"> 
             <div class="card">
@@ -80,6 +81,10 @@
     <link rel="stylesheet" href="css/datagreed.css">
     <script src="js/data-greed/template.js"></script>
     <script src="js/data-greed/component.js"></script>
+
+    <link rel="stylesheet" href="css/datagreedfilter.css">
+    <script src="js/data-greed-filter/template.js"></script>
+    <script src="js/data-greed-filter/component.js"></script>
 
     <!-- VUE JS -->
     <script src="js/app.js"></script>

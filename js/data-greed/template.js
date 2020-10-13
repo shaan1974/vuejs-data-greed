@@ -37,7 +37,7 @@ var templateDataGreed = `
                         
                             <div class="form-check w-100" v-if="d.switchVisibility">
                                 <input class="form-check-input" type="checkbox" value="" :id="'defaultCheck'+index+''" :checked="d.visibility" v-on:change="d.visibility=!d.visibility">
-                                <label class="form-check-label w-100 pl-1 d-block" :for="'defaultCheck'+index+''">{{d.name}}</label>
+                                <label class="form-check-label w-100 pl-1 d-block" :for="'defaultCheck'+index+''">{{config.labels.columns[index]}}</label>
                             </div>    
 
                             <div class="clearfix" v-if="d.switchVisibility"></div>

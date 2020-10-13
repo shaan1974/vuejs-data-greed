@@ -6,12 +6,169 @@ var DataGreed = {
     {
         return {
             "lg": "fr",
+            "dataGreedFilter":
+            {
+                "labels":
+                {
+                    "title": "Custom Filters",
+                    "btn_reset": "Reset",
+                    "btn_filters": "Apply filters",
+                },
+                "sidebarFilter": false,
+                "sidebarForm":
+                {
+                    "form": [
+                        /* INPUT-TEXT - SINGLE */
+                        {
+                            "column_ref": 1,
+                            "type": "input-text",
+                            "format": "STRING",
+                            "value": ""
+                        },
+                        /* INPUT-TEXT - MULTI */
+                        {
+                            "column_ref": 1,
+                            "type": "input-text",
+                            "format": "STRING",
+                            "values": []
+                        },
+                        /* DD-INPUT-TEXT - SINGLE */
+                        {
+                            "column_ref": 2,
+                            "type": "dd-input-text",
+                            "format": "STRING",
+                            "dic": "dd_list_1",
+                            "op": "",
+                            "value": ""
+                        },
+                        /* DD-INPUT-TEXT - MULTI */
+                        {
+                            "column_ref": 2,
+                            "type": "dd-input-text",
+                            "format": "STRING",
+                            "dic": "dd_list_1",
+                            "op": [],
+                            "values": []
+                        },
+                        /* DD-INPUT-NUMBER - SINGLE */
+                        {
+                            "column_ref": 4,
+                            "type": "dd-input-number",
+                            "format": "NUMBER",
+                            "dic": "dd_list_2",
+                            "op": "",
+                            "value1": "",
+                            "value2": ""
+                        },
+                        /* DD-INPUT-NUMBER - MULTI */
+                        {
+                            "column_ref": 4,
+                            "type": "dd-input-number",
+                            "format": "NUMBER",
+                            "dic": "dd_list_2",
+                            "op": [],
+                            "values1": [],
+                            "values2": []
+                        },
+                        /* DICTIONNARY - SINGLE */
+                        {
+                            "column_ref": 7,
+                            "type": "dictionnary",
+                            "format": "STRING",
+                            "dic": "dd_list_3",
+                            "value": ""
+                        },
+                        /* DICTIONNARY - MULTI */
+                        {
+                            "column_ref": 7,
+                            "type": "dictionnary",
+                            "format": "STRING",
+                            "dic": "dd_list_3",
+                            "values": []
+                        }
+                    ],
+                    "dropdown":
+                    {
+                        "dd_list_1": [
+                        {
+                            "t": "",
+                            "v": ""
+                        },
+                        {
+                            "t": "Eq",
+                            "v": "EQ"
+                        },
+                        {
+                            "t": "Neq",
+                            "v": "NEQ"
+                        },
+                        {
+                            "t": "Contains",
+                            "v": "LK"
+                        },
+                        {
+                            "t": "Startswith",
+                            "v": "SW"
+                        },
+                        {
+                            "t": "Endswith",
+                            "v": "EW"
+                        }],
+                        "dd_list_2": [
+                        {
+                            "t": "",
+                            "v": ""
+                        },
+                        {
+                            "t": "Range",
+                            "v": "RANGE"
+                        },
+                        {
+                            "t": "Gt",
+                            "v": "GT"
+                        },
+                        {
+                            "t": "Gte",
+                            "v": "GTE"
+                        },
+                        {
+                            "t": "Lt",
+                            "v": "LT"
+                        },
+                        {
+                            "t": "Lte",
+                            "v": "LTE"
+                        },
+                        {
+                            "t": "Eq",
+                            "v": "EQ"
+                        },
+                        {
+                            "t": "Neq",
+                            "v": "NEQ"
+                        }],
+                        "dd_list_3": [
+                        {
+                            "t": "",
+                            "v": ""
+                        },
+                        {
+                            "t": "Male",
+                            "v": "M"
+                        },
+                        {
+                            "t": "Female",
+                            "v": "F"
+                        }]
+                    }
+                }
+            },
             "dataGreedConfig":
             {
-                "customParameters": [],
+                "customParameters": "",
                 "options":
                 {
-                    "recordsPerPage": 10,
+                    "recordsPerPage": 5,
                     "perPageOptions": [3, 5, 10],
                     "dataSourceUrl": "dynamic/rest.php",
                     "xdataSourceUrl": "https://www.retroplayers.be/rest/rest.php",
@@ -19,7 +176,7 @@ var DataGreed = {
                     "horizontalScroll": true,
                     "verticalScroll": false,
                     "responsive": true,
-                    "globaSearchMinLength": 4,
+                    "globaSearchMinLength": 3,
                     "globalSearch": true,
                     "header": [3, 5],
                     "visualFilterForOrderedColumns": true,
@@ -213,7 +370,7 @@ var DataGreed = {
                         "css": "mw75px pl-1 pr-0",
                         "value": ""
                     },
-                    "switchVisibility": false
+                    "switchVisibility": true /*false*/
                 }],
                 "buttons": [
                 {
@@ -249,6 +406,9 @@ var DataGreed = {
     },
     methods:
     {
+        /*
+            CALL FROM EMIT
+        */
         getBtnCall: function(a, d, ndx)
         {
             console.log("*********************************");
@@ -260,5 +420,7 @@ var DataGreed = {
 };
 
 App = Vue.createApp(DataGreed);
+
 initDataGreedComponent(App);
+initDataGreedFilterComponent(App);
 App.mount('#app');

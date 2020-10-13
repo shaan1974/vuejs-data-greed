@@ -1,0 +1,115 @@
+/* --- */
+
+.sidenav {
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #343a40;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 10px;
+    width: 350px;
+    left: -350px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-right: 4px solid #868686;
+    z-index: 999;
+    overflow-y: scroll;
+}
+
+.sidenav label {
+    color: #fff;
+}
+
+.sidenav.on {
+    left: 0px;
+}
+
+.sidenav a {
+    text-decoration: none;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: 20px;
+    height: 22px;
+    width: 24px;
+    text-align: center;
+    margin-right: 5px;
+    margin-top: 5px;
+    color: #fff;
+    line-height: 18px;
+}
+
+.sidenav .closebtn:hover {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: 20px;
+    background-color: #eaeaea;
+    height: 22px;
+    width: 24px;
+    text-align: center;
+    border-radius: 100%;
+    margin-right: 5px;
+    margin-top: 5px;
+    color: #000;
+    line-height: 18px;
+}
+
+.sidenav hr {
+    border-top-color: #6c757d;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+    .sidenav a {
+        font-size: 18px;
+    }
+}
+
+.sidenav .bbadge span.badge {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    font-size: 75%;
+    border: 2px solid #afafaf;
+    border-right: 0px;
+}
+
+.sidenav .bbadge span.badge-icon {
+    background-color: #c20303;
+    color: #fff;
+    width: 20px;
+    border-top-right-radius: .2rem;
+    border-bottom-right-radius: .2rem;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    display: inline-block;
+    padding: .25em .4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    cursor: pointer;
+    font-size: 80%;
+    border: 2px solid #afafaf;
+    border-left: 0px;
+}
+
+body {
+    transition: 0.5s;
+}
+
+body.sidenavActive {
+    margin-left: 350px;
+}

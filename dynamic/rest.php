@@ -32,6 +32,27 @@
 
     $_POST = json_decode(file_get_contents("php://input"),true);
 
+    //  FUNCTIONS
+    //
+        function build_where($str,$re,$columns,$operators)
+        {
+            preg_match_all($re, $str, $matches, PREG_SET_ORDER, 0);
+
+            for($i=0;$i<count($matches);$i++)
+            {
+                if ( $matches[$i][1] === "C")
+                {
+                    $str = str_replace( $matches[$i][0], "".$columns->names[$matches[$i][2]]."" , $str );
+                }
+                else if ( $matches[$i][3] === "OP")
+                {
+                    $str = str_replace( $matches[$i][0], "".$operators[$matches[$i][4]]."" , $str );
+                }
+            } 
+
+            return $str;
+        }
+
     //  VARS
     //
         $columns = (object) [
@@ -39,6 +60,20 @@
             "types" => array(   "NONE",     "STRING",   "STRING",   "STRING",       "NUMBER",   "STRING",   "NUMBER",   "STRING"),
             "search" => array(  "NONE",     "LIKE",     "LIKE",     "LIKE",         "LIKE",     "LIKE",     "LIKE",     "EQ")
         ];  
+
+        $operators = array(
+            "NEQ" => "!=", 
+            "GTE" => ">=", 
+            "LTE" => "<=",
+            "GT" => ">", 
+            "LT" => "<",
+            "EQ" => "=",
+            "LK" => "LIKE",
+            "SW" => "LIKE",
+            "EW" => "LIKE"
+        );
+
+        $re = '/(C)\[(\d+)]|(OP):(NEQ|GTE|LTE|LT|GT|EQ|LK|SW|EW)/m';
 
     //  CUSTOM VARIABLES
     //
@@ -74,84 +109,65 @@
         //
         $where="";
 
-        if (  $_POST['customParameters'] === "" )
+        //  IF NO CUSTOM PARMS AND GLOBAL SEARCH
+        //
+        if (  $_POST['customParameters'] === ""  && $_POST['search_mode']==="GLOBAL" )
+        {
+            $w = array();
+            $jsonWhere = $_POST['search'];
+            for($j=0;$j<count($columns->names);$j++)
+            {
+                if ( $columns->types[$j]!=="NONE")
+                {
+                    array_push( $w , "( C[".$j."] OP:LK '%".$jsonWhere."%' )");
+                }
+
+            }
+            $where="".implode(" OR " , $w). "";
+            
+            $str = build_where("".$where."",$re,$columns,$operators);
+            $where=" WHERE ".$str. " ";
+        }
+        //  IF NO CUSTOM PARMS AND GLOBAL MULTI
+        //
+        else if (  $_POST['customParameters'] === "" && $_POST['search_mode']==="MULTI" )
         {
             $jsonWhere = json_decode($_POST['search'],true);
+            $w = array();
+
+            for($j=0;$j<count($columns->names);$j++)
+            {
+                if ( $columns->types[$j]!=="NONE" && $jsonWhere[$j]!="" )
+                {
+                    if ( $columns->search[$j]==="LIKE")
+                    {
+                        array_push( $w , "( C[".$j."] OP:LK '%".$jsonWhere[$j]."%' )");
+                    }
+                    else if ( $columns->search[$j]==="EQ")
+                    {
+                        array_push( $w , "( C[".$j."] OP:EQ '".$jsonWhere."' )");
+                    }
+                }
+            }
+
+            $where="".implode(" AND " , $w). "";
             
-            if ( $_POST['search_mode']==="")
-            {
-                $where="";
-            }
-            else if ( $_POST['search_mode']==="GLOBAL")
-            {
-                $w = array();
-                $jsonWhere = $_POST['search'];
-                for($j=0;$j<count($columns->names);$j++)
-                {
-                    if ( $columns->types[$j]!=="NONE")
-                    {
-                        array_push( $w , " ".$columns->names[$j]." like '%".$jsonWhere."%'" );
-                    }
-                }
-                $where=" WHERE ".implode(" OR " , $w). " ";
-            }
-            else if ( $_POST['search_mode']==="MULTI")
-            {
-                $w = array();
-                for($j=0;$j<count($columns->names);$j++)
-                {
-                    if ( $columns->types[$j]!=="NONE" && $jsonWhere[$j]!="" )
-                    {
-                        if ( $columns->search[$j]==="LIKE")
-                        {
-                            array_push( $w , " ".$columns->names[$j]." like '%".$jsonWhere[$j]."%'" );
-                        }
-                        else if ( $columns->search[$j]==="EQ")
-                        {
-                            array_push( $w , " ".$columns->names[$j]." = '".$jsonWhere[$j]."'" );
-                        }
-                    }
-                }
-                $where=" WHERE ".implode(" AND " , $w). " ";
-            }
+            $str = build_where("".$where."",$re,$columns,$operators);
+            $where=" WHERE ".$str. " ";
         }
+        //  IF NO CUSTOM PARMS AND SEARCH NONE
+        //
+        else if (  $_POST['customParameters'] === "" && $_POST['search_mode']==="" )
+        {
+            $where="";
+        }
+        //  IF CUSTOM PARMS
+        // 
         else
         {   
-            $jsonWhere = json_decode($_POST['customParameters'],true);
-            // print_r($jsonWhere);
-
-            $w = array();
-            for($i=0;$i<count($jsonWhere);$i++)
-            {
-                
-                $cname = $columns->names[$jsonWhere[$i]["c"]];
-                $op="";
-                
-                switch( $jsonWhere[$i]["o"])
-                {
-                    case "LT" :
-                                    $op = "<";
-                                    break;
-                }
-                
-                $ctype = $columns->types[$jsonWhere[$i]["c"]];
-
-                $aq="";
-                if ( $ctype==="STRING")
-                {
-                    $aq="'";
-                }
-
-                $v = $jsonWhere[$i]["v"];
-                array_push( $w , "".$cname." ".$op." ".$aq."".$v."".$aq." " );
-            }
-
-            // print_r($w);
-            $where=" WHERE ".implode(" AND " , $w). " ";
-            // echo $where;
-            // die();
+            $str = build_where("".$_POST['customParameters']."",$re,$columns,$operators);           
+            $where=" WHERE ".$str. " ";
         }
-
 
     //  GET TOTAL ROWS - TOTAL PAGES
     //

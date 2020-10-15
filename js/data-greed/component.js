@@ -574,25 +574,24 @@ function initDataGreedComponent(vapp)
                 },
                 _highlight: function(v, ndx)
                 {
+                    //  IF HIGHLIGHT SHOULD NOT BE DONE
+                    //
+                    if (this.config.options.highlight === false)
+                    {
+                        return v;
+                    }
+
+                    //  IN CASE OF CUSTOM PARAMETERS
+                    //
                     if (this.searchMode === "" && this.config.customParameters != "")
                     {
-                        /*console.log("*******************************");
-                        console.log(this.config.customParameters);
-                        console.log(v);
-                        console.log(ndx);
-                        */
+                        v = this._checkCustomParameters(v, ndx);
+                        return v;
                     }
 
                     if (this.searchMode === "") return v;
 
                     if (typeof this.config.columns[ndx].search === "undefined")
-                    {
-                        return v;
-                    }
-
-                    //  IF HIGHLIGHT SHOULD NOT BE DONE
-                    //
-                    if (this.config.options.highlight === false)
                     {
                         return v;
                     }
@@ -660,6 +659,59 @@ function initDataGreedComponent(vapp)
                     {
                         this.$emit(this.$options.emits[0], b.action, d, ndx);
                     }
+                },
+                /*
+
+                */
+                _checkCustomParameters: function(v, ndx)
+                {
+                    //  SPLIT WITH "AND ("
+                    //
+                    var main_re = /\sAND\s\(/;
+                    //  SO WE NEED TO ADD STARTING "(" FOR FIRST ONE IN THE LIST
+                    //
+                    var main_q = this.config.customParameters.split(main_re).map(function(o, i)
+                    {
+                        return (i !== 0) ? "(" + o : o;
+                    });
+
+                    var regex, regex2, str, m;
+
+                    for (var i = 0; i < main_q.length; i++)
+                    {
+                        regex = /C\[(\d+)\]\s(OP:(\w+))\s('[%]*\w+[%]*'|\d+)/gm;
+                        str = main_q[i];
+
+                        while ((m = regex.exec(str)) !== null)
+                        {
+                            if (m.index === regex.lastIndex)
+                            {
+                                regex.lastIndex++;
+                            }
+
+                            //  IF COLUMN IN REQUEST CORRESPOND TO CURRENT COLUMN
+                            //
+                            if (parseInt(m[1]) === ndx)
+                            {
+                                switch (m[3])
+                                {
+                                    case "LK":
+                                        regex2 = new RegExp('(' + m[4].slice(2, -2) + ')', 'gi');
+                                        v = v.replace(regex2, "<mark class='alert-success'>$1</mark>");
+                                        break;
+                                    case "SW":
+                                        regex2 = new RegExp('(^' + m[4].slice(1, -2) + ')', 'gi');
+                                        v = v.replace(regex2, "<mark class='alert-success'>$1</mark>");
+                                        break;
+                                    case "EW":
+                                        regex2 = new RegExp('(' + m[4].slice(2, -1) + '$)', 'gi');
+                                        v = v.replace(regex2, "<mark class='alert-success'>$1</mark>");
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                    return v;
                 }
             }
         }

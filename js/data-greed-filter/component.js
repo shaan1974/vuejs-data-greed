@@ -9,6 +9,7 @@ function initDataGreedFilterComponent(vapp)
             data: function()
             {
                 return {
+                    "base_mode": "",
                     "expressions": []
                 };
             },
@@ -44,6 +45,8 @@ function initDataGreedFilterComponent(vapp)
                         ci.tmp_value = "";
                     }
                 }
+
+                this.base_mode = this.filter.sidebarForm.mode;
             },
             computed:
             {
@@ -101,6 +104,19 @@ function initDataGreedFilterComponent(vapp)
                         {
                             return that.build_D2(o);
                         }
+                        // E1 : TYPE DD-INPUT-DATE , MODE SINGLE
+                        //
+                        else if (o.type === "dd-input-date" && typeof o.value1 !== "undefined" && /*o.op !== ""*/ typeof o.op !== "undefined")
+                        {
+                            return that.build_E1(o);
+                        }
+                        // E2 : TYPE DD-INPUT-NUMBER , MODE : MULTI
+                        //
+                        else if (o.type === "dd-input-date" && typeof o.values1 !== "undefined" && /*o.op.length !== 0*/ typeof o.op !== "undefined")
+                        {
+                            return that.build_E2(o);
+                        }
+
 
                         return "[" + i + "]" + o.column_ref + "-" + o.type;
                     });
@@ -110,7 +126,6 @@ function initDataGreedFilterComponent(vapp)
             {
                 'filter.sidebarFilter': function(o, ov)
                 {
-                    console.log(o, ov);
                     if (o === true)
                     {
                         document.querySelector("body").classList.add("sidenavActive");
@@ -166,8 +181,8 @@ function initDataGreedFilterComponent(vapp)
                 build_B1: function(o)
                 {
                     var v = o.value;
-                    v = (o.op === "LK" || o.op === "SW") ? "%" + v : v;
-                    v = (o.op === "LK" || o.op === "EW") ? v + "%" : v;
+                    v = (o.op === "LK" || o.op === "SW") ? v + "%" : v;
+                    v = (o.op === "LK" || o.op === "EW") ? "%" + v : v;
 
                     return (o.value != "" && o.op != "") ? "( C[" + o.column_ref + "] OP:" + o.op + " '" + this.escapeSingleQuotes(v) + "' )" : "";
 
@@ -183,8 +198,8 @@ function initDataGreedFilterComponent(vapp)
                         if (o.values[i] !== "" && o.op[i] !== "")
                         {
                             v = o.values[i];
-                            v = (o.op[i] === "LK" || o.op[i] === "SW") ? "%" + v : v;
-                            v = (o.op[i] === "LK" || o.op[i] === "EW") ? v + "%" : v;
+                            v = (o.op[i] === "LK" || o.op[i] === "SW") ? v + "%" : v;
+                            v = (o.op[i] === "LK" || o.op[i] === "EW") ? "%" + v : v;
                             r.push("( C[" + o.column_ref + "] OP:" + o.op[i] + " '" + v + "' )");
 
                             // r.push("( C[" + o.column_ref + "] OP:" + o.op[i] + " '" + o.values[i] + "' )");
@@ -242,6 +257,37 @@ function initDataGreedFilterComponent(vapp)
 
                     return (r.length !== 0) ? "( " + r.join(" OR ") + " ) " : "";
                 },
+                build_E1: function(o)
+                {
+                    if (o.value1 !== "" && o.value2 !== "" && o.op === "RANGE")
+                    {
+                        return "( C[" + o.column_ref + "] OP:GT '" + o.value1 + "' AND C[" + o.column_ref + "] OP:LT '" + o.value2 + "' )";
+                    }
+                    else if (o.value1 !== "" && (o.op !== "" && o.op !== "RANGE"))
+                    {
+                        return "( C[" + o.column_ref + "] OP:" + o.op + " '" + o.value1 + "' )";
+                    }
+
+                    return "";
+                },
+                build_E2: function(o)
+                {
+                    var r = [];
+
+                    for (var i = 0; i < o.values1.length; i++)
+                    {
+                        if (o.values1[i] !== "" && o.values2[i] !== "" && o.op[i] === "RANGE")
+                        {
+                            r.push("( C[" + o.column_ref + "] OP:GT '" + o.values1[i] + "' AND C[" + o.column_ref + "] OP:LT '" + o.values2[i] + "' )");
+                        }
+                        else if (o.values1[i] !== "" && (o.op[i] !== "" && o.op[i] !== "RANGE"))
+                        {
+                            r.push("( C[" + o.column_ref + "] OP:" + o.op[i] + " '" + o.values1[i] + "' )");
+                        }
+                    }
+
+                    return (r.length !== 0) ? "( " + r.join(" OR ") + " ) " : "";
+                },
                 /*
                     FILTERS    
                 */
@@ -252,7 +298,8 @@ function initDataGreedFilterComponent(vapp)
                         if (o !== "") return o;
                     }).join(" AND ");
 
-                    console.log(g);
+                    // console.log(g);
+                    // return false;
 
                     this.config.customParameters = g;
 
@@ -263,7 +310,7 @@ function initDataGreedFilterComponent(vapp)
                         "v": "30"
                     }];*/
                 },
-                resetFilter: function(zz)
+                resetFilter: function(zz, m)
                 {
                     var o;
 
@@ -309,6 +356,11 @@ function initDataGreedFilterComponent(vapp)
                         {
                             o.tmp_value = "";
                         }
+                    }
+
+                    if (typeof m !== "undefined")
+                    {
+                        this.config.customParameters = "";
                     }
                 },
                 /*

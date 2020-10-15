@@ -1,6 +1,6 @@
 # VueJS Data-Greed
 
-Still on developpement the purpose it to have a DataTable that handle Ajax calls.
+Still on developpement the purpose it to have a DataTable that handle Ajax calls. I hope final version should be available soon.
 
 **Tips and tricks:**
 
@@ -8,9 +8,11 @@ You can do a single order, just click on the header column, and if you want mult
 
 **Demo :**
 
-[Fully working demo](https://jsfiddle.net/shaan1974/L65p1ydc/)
+[Fully working demo](https://codepen.io/shaan1974/pen/MWeKXye)
 
 **Configuration :**
+
+DataGreed.
 
 Configuration are split into 5 sections : "options", "labels", "css" , "columns" and "buttons".
 
@@ -58,6 +60,23 @@ Configuration are split into 5 sections : "options", "labels", "css" , "columns"
 
 For button action take a look into the debug console.
 
+DataGreedFilter
+
+Configuration are split into 2 sections : "labels", "form".
+
+The example contains all type of input available for the search.
+
+- A1 - Single - Text
+- A2 - Multiple - Text
+- B1 - Single - Selectbox (EQ,NEQ,STARTSWITH,ENDSWITH, CONTAINS)  + Text
+- B2 - Multiple - Selectbox (EQ,NEQ,STARTSWITH,ENDSWITH, CONTAINS)  + Text
+- C1 - Single - Selectbox (EQ,NEQ,GTE,GTE,LTE,LTE,RANGE)  + Number
+- C2 - Multiple - Selectbox (EQ,NEQ,GTE,GTE,LTE,LTE,RANGE)  + Number
+- D1 - Single - Selectbox attach to a dictionnary
+- D2 - Multiple - Selectbox attach to a dictionnary
+- E1 - Single - Selectbox (EQ,NEQ,GTE,GTE,LTE,LTE,RANGE)  + Date
+- E2 - Multiple - Selectbox (EQ,NEQ,GTE,GTE,LTE,LTE,RANGE)  + Date
+
 **Dependecies :**
 
 Right now no dependencies except : Boostrap 4 (for the look and fell) ,Axios.
@@ -78,9 +97,19 @@ For "customParameters" i prove an example but fell free to create you own struct
 - Documentation ( more detail ).
 - Languages support.
 - Dedicate column in the footer that do a sum of a numeric column.
-- With custom parameters - Add Highlight on found occurences.
+- Save multiple filters ( Save in localstorage )
 
 **Versions :**
+
+2.1  ( Womanizer  - Britney Spears )
+
+- Add reset for some element of the filter component.
+- Add a google font.
+- Add highlight on found occurence for search coming from Filter Component. ( Done for contains, Startswith and Endswith )
+- In rest file in query dynamic query field names
+- Interface Filter - Base/extended.
+- Input type date in component filter, it use the basic input type='date'
+- Example move to codepen.io
 
 2.0 ( Battlestar Galactica 2003 )
 

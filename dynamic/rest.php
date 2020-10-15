@@ -56,9 +56,9 @@
     //  VARS
     //
         $columns = (object) [
-            "names" => array(   "id",       "fullname", "nickname", "birthdate",    "age",      "email",    "salary",   "gender"),
-            "types" => array(   "NONE",     "STRING",   "STRING",   "STRING",       "NUMBER",   "STRING",   "NUMBER",   "STRING"),
-            "search" => array(  "NONE",     "LIKE",     "LIKE",     "LIKE",         "LIKE",     "LIKE",     "LIKE",     "EQ")
+            "names" => array(   "id",       "fullname", "nickname", "birthdate",    "age",      "email",    "salary",   "gender"    , "created_at"  ),
+            "types" => array(   "NONE",     "STRING",   "STRING",   "STRING",       "NUMBER",   "STRING",   "NUMBER",   "STRING"    , "STRING "     ),
+            "search" => array(  "NONE",     "LIKE",     "LIKE",     "LIKE",         "LIKE",     "LIKE",     "LIKE",     "EQ"        , "LIKE"        )   
         ];  
 
         $operators = array(
@@ -179,7 +179,8 @@
     
     //  GET DATA RELATED TO THE RANGE
     //
-        $sql = "SELECT id,fullname,nickname,birthdate,age,email,salary,gender FROM _users ".$where." {{ORDER}} LIMIT $offset, $no_of_records_per_page";
+        // $sql = "SELECT id,fullname,nickname,birthdate,age,email,salary,gender,created_at FROM _users ".$where." {{ORDER}} LIMIT $offset, $no_of_records_per_page";
+        $sql = "SELECT ".implode(", " , $columns->names )." FROM _users ".$where." {{ORDER}} LIMIT $offset, $no_of_records_per_page";
 
     //  REPLACE ORDER
     //

@@ -13,24 +13,30 @@ var DataGreed = {
                     "title": "Custom Filters",
                     "btn_reset": "Reset",
                     "btn_filters": "Apply filters",
+                    "filter_classic": "Classic",
+                    "filter_extended": "Extended",
                 },
                 "sidebarFilter": false,
                 "sidebarForm":
                 {
+                    "mode": "classic",
+                    /* full, classic, extended */
                     "form": [
                         /* INPUT-TEXT - SINGLE */
                         {
                             "column_ref": 1,
                             "type": "input-text",
                             "format": "STRING",
-                            "value": ""
+                            "value": "",
+                            "fmode": "classic"
                         },
                         /* INPUT-TEXT - MULTI */
                         {
                             "column_ref": 1,
                             "type": "input-text",
                             "format": "STRING",
-                            "values": []
+                            "values": [],
+                            "fmode": "extended"
                         },
                         /* DD-INPUT-TEXT - SINGLE */
                         {
@@ -39,7 +45,8 @@ var DataGreed = {
                             "format": "STRING",
                             "dic": "dd_list_1",
                             "op": "",
-                            "value": ""
+                            "value": "",
+                            "fmode": "classic"
                         },
                         /* DD-INPUT-TEXT - MULTI */
                         {
@@ -48,7 +55,8 @@ var DataGreed = {
                             "format": "STRING",
                             "dic": "dd_list_1",
                             "op": [],
-                            "values": []
+                            "values": [],
+                            "fmode": "extended"
                         },
                         /* DD-INPUT-NUMBER - SINGLE */
                         {
@@ -58,7 +66,8 @@ var DataGreed = {
                             "dic": "dd_list_2",
                             "op": "",
                             "value1": "",
-                            "value2": ""
+                            "value2": "",
+                            "fmode": "classic"
                         },
                         /* DD-INPUT-NUMBER - MULTI */
                         {
@@ -68,7 +77,8 @@ var DataGreed = {
                             "dic": "dd_list_2",
                             "op": [],
                             "values1": [],
-                            "values2": []
+                            "values2": [],
+                            "fmode": "extended"
                         },
                         /* DICTIONNARY - SINGLE */
                         {
@@ -76,7 +86,8 @@ var DataGreed = {
                             "type": "dictionnary",
                             "format": "STRING",
                             "dic": "dd_list_3",
-                            "value": ""
+                            "value": "",
+                            "fmode": "classic"
                         },
                         /* DICTIONNARY - MULTI */
                         {
@@ -84,7 +95,30 @@ var DataGreed = {
                             "type": "dictionnary",
                             "format": "STRING",
                             "dic": "dd_list_3",
-                            "values": []
+                            "values": [],
+                            "fmode": "extended"
+                        },
+                        /*  DD-INPUT-DATE - SINGLE */
+                        {
+                            "column_ref": 3,
+                            "type": "dd-input-date",
+                            "format": "DATE",
+                            "dic": "dd_list_2",
+                            "op": "",
+                            "value1": "",
+                            "value2": "",
+                            "fmode": "classic"
+                        },
+                        /* DD-INPUT-DATE - MULTI */
+                        {
+                            "column_ref": 3,
+                            "type": "dd-input-date",
+                            "format": "DATE",
+                            "dic": "dd_list_2",
+                            "op": [],
+                            "values1": [],
+                            "values2": [],
+                            "fmode": "extended"
                         }
                     ],
                     "dropdown":
@@ -219,7 +253,7 @@ var DataGreed = {
                     },
                     "visibility": "Visibility",
                     "columns": [
-                        "A..", "B..", "C..", "D..", "E..", "F..", "G..", "H.."
+                        "A..", "B..", "C..", "D..", "E..", "F..", "G..", "H..", "I.."
                     ]
                 },
                 "css":
@@ -371,7 +405,25 @@ var DataGreed = {
                         "value": ""
                     },
                     "switchVisibility": true /*false*/
-                }],
+                },
+                {
+                    "name": "COLUMN_I",
+                    "fctTransform": function(s, t)
+                    {
+                        return moment("" + s + "", "YYYY-MM-DD").format("DD-MM-YYYY");
+                    },
+                    "class": "",
+                    "visibility": false,
+                    "orderVisibility": false,
+                    "orderMode": "",
+                    "search":
+                    {
+                        "type": "input",
+                        "value": "",
+                        "minLength": 3
+                    },
+                    "switchVisibility": false
+                }, ],
                 "buttons": [
                 {
                     "action": "edit_",

@@ -29,7 +29,7 @@
 </head>
 
 <body>
-
+    
     <div id="app">
 
         <data-greed-filter ref="main-data-greed-filter" v-bind:config="dataGreedConfig" v-bind:filter="dataGreedFilter"></data-greed-filter>

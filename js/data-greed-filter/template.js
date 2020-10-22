@@ -313,10 +313,16 @@ var templateDataGreedFilter = `
             <button type="button" class="btn btn-secondary btn-sm float-left" v-on:click="this.resetFilter(this.filter.sidebarForm.form,'full')" v-html="filter.labels.btn_reset"></button>
             <button type="button" class="btn btn-primary btn-sm float-right" v-on:click="this.applyFilter()" v-html="filter.labels.btn_filters"></button>
 
+            <br/>
+
         </form>
 
     </div>
 
     <!-- /EXAMPLE SIDEBAR CUSTOM FILTER -->
+
+    <teleport to="body">
+        <div v-if="backDrop" class="modal-backdrop fade show"></div>
+    </teleport> 
 
 `;

@@ -15,7 +15,7 @@
     padding-left: 10px;
     padding-right: 10px;
     border-right: 4px solid #868686;
-    z-index: 999;
+    z-index: 99999;
     overflow-y: scroll;
 }
 

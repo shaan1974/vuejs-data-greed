@@ -17,6 +17,7 @@ var DataGreed = {
                     "filter_extended": "Extended",
                 },
                 "sidebarFilter": false,
+                "setBackDrop": true,
                 "sidebarForm":
                 {
                     "mode": "classic",
@@ -205,7 +206,7 @@ var DataGreed = {
                     "recordsPerPage": 5,
                     "perPageOptions": [3, 5, 10],
                     "dataSourceUrl": "dynamic/rest.php",
-                    "xdataSourceUrl": "https://www.retroplayers.be/rest/rest.php",
+                    "xdataSourceUrl": "https://retroplayers.be/dg/orest.php",
                     "displayEmptyLines": true,
                     "horizontalScroll": true,
                     "verticalScroll": false,

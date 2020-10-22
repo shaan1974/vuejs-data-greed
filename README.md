@@ -101,6 +101,17 @@ For "customParameters" i prove an example but fell free to create you own struct
 
 **Versions :**
 
+2.3 - ( Ultra Instinct )
+
+- Refactoring
+- Update example
+IW - Custom datepicker
+
+2.2 - ( AOA - Oh Boy )
+
+- Component Filter - backDrop for Filter ( set as option )
+- Update Favico
+
 2.1  ( Womanizer  - Britney Spears )
 
 - Add reset for some element of the filter component.

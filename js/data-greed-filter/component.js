@@ -10,7 +10,8 @@ function initDataGreedFilterComponent(vapp)
             {
                 return {
                     "base_mode": "",
-                    "expressions": []
+                    "expressions": [],
+                    "backDrop": false
                 };
             },
             props: ['config', 'filter'],
@@ -129,10 +130,19 @@ function initDataGreedFilterComponent(vapp)
                     if (o === true)
                     {
                         document.querySelector("body").classList.add("sidenavActive");
+
+                        if (this.filter.setBackDrop === true)
+                        {
+                            this.backDrop = true;
+                        }
                     }
                     else
                     {
                         document.querySelector("body").classList.remove("sidenavActive");
+                        if (this.filter.setBackDrop === true)
+                        {
+                            this.backDrop = false;
+                        }
                     }
                 }
             },

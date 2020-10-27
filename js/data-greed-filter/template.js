@@ -268,7 +268,7 @@ var templateDataGreedFilter = `
                     </div>
                     <!-- /E1 -->
 
-                    <!-- E2 : TYPE DD-INPUT-NUMBER , MODE : MULTI -->
+                    <!-- E2 : TYPE DD-INPUT-DATE , MODE : MULTI -->
                     <div class="form-row input_sep mb-2" v-if="typeof d.values1 !== 'undefined' ">
                         
                         <div class="col-12 pb-2">

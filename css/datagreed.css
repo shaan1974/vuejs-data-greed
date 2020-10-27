@@ -28,6 +28,7 @@
     display: block;
     max-height: 200px;
     overflow-y: auto;
+    position: relative;
 }
 
 .dataGreed .scrollTableVertical thead,

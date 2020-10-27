@@ -159,6 +159,16 @@ function initDataGreedComponent(vapp)
                 ["config.customParameters"]: function()
                 {
                     this._navigate(1);
+                },
+                ["config.options.recordsPerPage"]: function()
+                {
+                    this.records = [];
+                    this.config_recordsPerPage = parseInt(this.config.options.recordsPerPage);
+
+                    this.$nextTick(() =>
+                    {
+                        this._navigate(1);
+                    });
                 }
             },
             methods:
@@ -334,7 +344,7 @@ function initDataGreedComponent(vapp)
                             data:
                             {
                                 pageno: this.pageno,
-                                per_page: this.config_recordsPerPage,
+                                per_page: parseInt(this.config_recordsPerPage),
                                 order: JSON.stringify(this.order),
                                 search: searchParm,
                                 search_mode: __searchMode,
@@ -493,6 +503,7 @@ function initDataGreedComponent(vapp)
                 */
                 _changePerPage: function(e)
                 {
+                    this.records = [];
                     this.config_recordsPerPage = e.target.value;
                     this._navigate(1);
                 },
@@ -598,7 +609,7 @@ function initDataGreedComponent(vapp)
 
                     var regex, r;
 
-                    if (this.searchMode === "GLOBAL")
+                    if (this.searchMode === "GLOBAL" && this.globalSearch.length >= this.config.options.globaSearchMinLength)
                     {
                         if (this.config.columns[ndx].search.type === "input")
                         {

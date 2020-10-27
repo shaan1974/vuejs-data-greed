@@ -6,3 +6,7 @@ body {
 .cursor {
     cursor: pointer;
 }
+
+select {
+    cursor: pointer;
+}

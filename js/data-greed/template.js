@@ -3,7 +3,7 @@
 var templateDataGreed = `
 
     <div class="dataGreedToolBar">
-
+        
         <!-- TOP TOOLBAR -->
         <form class="form-inline">
 
@@ -61,7 +61,8 @@ var templateDataGreed = `
             <thead>
                 
                 <!-- HEADER -->
-                <tr v-if="config.options.header">
+                <template v-if="config.options.header">
+                <tr v-if="config.options.header.length!==0">
                     
                     <!-- FIRST COL IF EXTRA -->
                     <th v-if="config.options.displayUnswitchColumnsAsExtraInfos && visibleColumsLen!==0 && isUnswitchColumns"></th>
@@ -76,6 +77,7 @@ var templateDataGreed = `
                     <th v-if="config.buttons.length!==0" :class="config.options.outSideButtons ? 'btns-cell': ''">&#160;</th>
 
                 </tr>
+                </template>
                 <!-- /HEADER -->
 
                 <!-- COLUMNS NAME -->
@@ -102,7 +104,7 @@ var templateDataGreed = `
                 <!-- /COLUMNS NAME -->
 
                 <!-- SEARCH ON COLUMNS -->
-                <tr v-if="this.config.columns.filter( function(o) { if (o.search!==undefined) return o;} ).length!==0">
+                <tr v-if="(this.config.columns.filter( function(o) { if (o.search!==undefined) return o;} ).length!==0 && this.config.options.columnsSearch === true)">
                     
                     <!-- FIRST COL IF EXTRA -->
                     <th v-if="config.options.displayUnswitchColumnsAsExtraInfos && visibleColumsLen!==0 && isUnswitchColumns"></th>
@@ -170,7 +172,7 @@ var templateDataGreed = `
 
                         <td v-if="config.buttons.length!==0" :class="config.options.outSideButtons ? 'btns-cell': ''">
 
-                            <div :class="config.options.outSideButtons ? 'btn-container': ''">
+                            <div :class="config.options.outSideButtons ? 'btn-container': 'd-flex'">
                                 <template v-for="(e,index) in config.buttons">
                                     <button type="button" class="btn btn-sm mr-1" :class="e.css" v-on:click="this._buttons(e,d,main_index);" v-html="config.labels.buttons[e.label]"></button>
                                 </template>
@@ -252,7 +254,7 @@ var templateDataGreed = `
         
             <template v-for="p in pagination">
             
-                <li class="page-item" :class="[ p.active ? 'active' : '' ]" v-if="p.isPage===false || (p.isPage===true && config.options.pagerNoNumber===true) ">
+                <li class="page-item" :class="[ p.active ? 'active' : '' ]">
                     <a class="page-link" :class="p.aclass" href="" v-on:click.prevent="this._navigate(p.v)">{{p.lbl}}</a>
                 </li>
 

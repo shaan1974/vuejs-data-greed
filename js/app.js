@@ -206,21 +206,21 @@ var DataGreed = {
                     "recordsPerPage": 5,
                     "perPageOptions": [3, 5, 10],
                     "dataSourceUrl": "dynamic/rest.php",
-                    "xdataSourceUrl": "https://retroplayers.be/dg/orest.php",
-                    "displayEmptyLines": true,
+                    /*"xdataSourceUrl": "https://retroplayers.be/dg/orest.php",*/
+                    "displayEmptyLines": false,
                     "horizontalScroll": true,
                     "verticalScroll": false,
                     "responsive": true,
                     "globaSearchMinLength": 3,
                     "globalSearch": true,
+                    "columnsSearch": true,
                     "header": [3, 5],
                     "visualFilterForOrderedColumns": true,
                     "jumpPage": true,
                     'entriesInfo': true,
                     "outSideButtons": true,
                     "displayUnswitchColumnsAsExtraInfos": true,
-                    "highlight": true,
-                    "pagerNoNumber": true
+                    "highlight": true
                 },
                 "labels":
                 {
@@ -454,7 +454,7 @@ var DataGreed = {
     {},
     mounted: function()
     {
-        // console.log(this);
+        console.log(this);
         // this.$refs["main-data-greed"].globalSearch="12"
     },
     methods:
@@ -476,4 +476,5 @@ App = Vue.createApp(DataGreed);
 
 initDataGreedComponent(App);
 initDataGreedFilterComponent(App);
+initDataGreedConfigComponent(App);
 App.mount('#app');

@@ -1,0 +1,28 @@
+.fs14px {
+    font-size: 14px;
+}
+
+.lh14px {
+    line-height: 14px;
+}
+
+.w75p {
+    width: 75%;
+}
+
+.tab-border {
+    border: 1px solid #dee2e6;
+    border-top: 0px;
+}
+
+.config-part * {
+    font-size: 12px;
+}
+
+.config-part label {
+    font-weight: bold;
+}
+
+.config-part textarea {
+    min-height: 100px;
+}

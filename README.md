@@ -28,6 +28,7 @@ Configuration are split into 5 sections : "options", "labels", "css" , "columns"
     - "responsive": true => If responsive on small devices
     - "globaSearchMinLength" => Min chars for global search
     - "globalSearch" => If global seach is visible or not
+    - "columnsSearch" => if value 'false' remove search by column event some columns has a search parameters defined.
     - "header" => Definition for global header upper columns names
     - "visualFilterForOrderedColumns" => Show different color for ordered columns
     - "jumpPage" => Jump to page selectbox visible or not.
@@ -35,7 +36,6 @@ Configuration are split into 5 sections : "options", "labels", "css" , "columns"
     - "outSideButtons" => if action buttons should be inside cell or outside
     - "displayUnswitchColumnsAsExtraInfos" => If true columns with "visibility" eq "false" and "switchVisibility" eq "false" could be display into an extra block activated with a button.
     - "highlight" : Hightlight or not found occurences.
-    - "pagerNoNumber" : Indicate if pager should contain Number or just "First", "Prev", "Next" and "Last".
 - Labels ( i expect you know what it's related )
 - Css
     - "Table"
@@ -59,6 +59,8 @@ Configuration are split into 5 sections : "options", "labels", "css" , "columns"
 ```
 
 For button action take a look into the debug console.
+
+Rem: For Css customisation the component is divided in 3 part. Classes for each part : "dataGreedToolBar", "dataGreed" and "dataGreedPagination". Feel free to create you own classes.
 
 DataGreedFilter
 
@@ -98,14 +100,23 @@ For "customParameters" i prove an example but fell free to create you own struct
 - Languages support.
 - Dedicate column in the footer that do a sum of a numeric column.
 - Save multiple filters ( Save in localstorage )
+IW - Custom datepicker
 
 **Versions :**
+
+2.4  -  ( Justice League )
+
+- Add an extra parameters in config to be able to remove search by column event some columns has a search parameters defined.
+- Correct a bug about table with negatif index.
+- Correct bug with highlight for global search.
+- Update Template for option Headers.
+- Remove Option PageNoNumber.
+- Dedicate component to build the config quickly.
 
 2.3 - ( Ultra Instinct )
 
 - Refactoring
 - Update example
-IW - Custom datepicker
 
 2.2 - ( AOA - Oh Boy )
 

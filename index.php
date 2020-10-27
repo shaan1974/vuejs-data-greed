@@ -34,6 +34,18 @@
 
         <data-greed-filter ref="main-data-greed-filter" v-bind:config="dataGreedConfig" v-bind:filter="dataGreedFilter"></data-greed-filter>
 
+        <!-- CONFIG BUILDER -->
+        <div class="container mb-4 mt-4"> 
+            <div class="card">
+                <div class="card-body">  
+                    
+                    <data-greed-config ref="main-data-greed-config" v-bind:config="dataGreedConfig"></data-greed-config>
+
+                </div>
+            </div>
+        </div>
+        <!-- /CONFIG BUILDER -->
+
         <div class="container mb-4 mt-4"> 
             <div class="card">
                 <div class="card-body">  
@@ -91,6 +103,15 @@
     <link rel="stylesheet" href="css/datagreedfilter.css">
     <script src="js/data-greed-filter/template.js"></script>
     <script src="js/data-greed-filter/component.js"></script>
+
+    <!-- DATA-GREED-CONFIG -->
+
+    <!--
+    <script src="build/data-greed-config.js"></script>    
+    -->
+    <link rel="stylesheet" href="css/datagreedconfig.css">
+    <script src="js/data-greed-config/template.js"></script>
+    <script src="js/data-greed-config/component.js"></script>
 
     <!-- VUE JS -->
     <script src="js/app.js"></script>
